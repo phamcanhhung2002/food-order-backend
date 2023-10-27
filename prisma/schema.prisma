@@ -1,0 +1,140 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id       Int    @id @default(autoincrement())
+  name     String @db.VarChar(255)
+  quantity Int    @default(0)
+  foods    Food[]
+}
+
+model Tag {
+  id    Int    @id @default(autoincrement())
+  name  String @db.VarChar(255)
+  foods Food[]
+}
+
+model Menu {
+  id    Int    @id @default(autoincrement())
+  name  String @db.VarChar(255)
+  foods Food[]
+}
+
+model Image {
+  id      Int    @id @default(autoincrement())
+  food    Food   @relation(fields: [foodId], references: [id])
+  foodId  Int
+  imageId String @db.VarChar(255)
+}
+
+model Review {
+  id      Int    @id @default(autoincrement())
+  food    Food   @relation(fields: [foodId], references: [id])
+  foodId  Int
+  content String @db.Text
+}
+
+model Food {
+  id           Int             @id @default(autoincrement())
+  category     Category        @relation(fields: [categoryId], references: [id])
+  categoryId   Int
+  name         String          @db.VarChar(255)
+  price        Float           @db.SmallMoney
+  discount     Float           @db.SmallMoney
+  energy       Int
+  rating       Float
+  quantity     Int             @default(0)
+  introduction String
+  description  String
+  createdDate  DateTime
+  tags         Tag[]
+  reviews      Review[]
+  menus        Menu[]
+  images       Image[]
+  orders       FoodsOnOrders[]
+  customers    Customer[]
+}
+
+model Voucher {
+  id          Int     @id @default(autoincrement())
+  orders      Order[]
+  minOrder    Int
+  discount    Float   @db.SmallMoney
+  description String  @db.VarChar(255)
+  code        String  @db.VarChar(255)
+}
+
+model Status {
+  id     Int     @id @default(autoincrement())
+  name   String  @db.VarChar(255)
+  orders Order[]
+}
+
+model Order {
+  id           Int             @id @default(autoincrement())
+  voucher      Voucher         @relation(fields: [voucherId], references: [id])
+  voucherId    Int
+  foods        FoodsOnOrders[]
+  status       Status          @relation(fields: [statusId], references: [id])
+  statusId     Int
+  subTotal     Float           @db.SmallMoney
+  deliveryFee  Float           @db.SmallMoney
+  tax          Decimal         @db.Decimal(4, 2)
+  expectedTime DateTime
+  completeTime DateTime
+  shipperPhone String          @db.VarChar(255)
+}
+
+model FoodsOnOrders {
+  id       Int   @id @default(autoincrement())
+  food     Food  @relation(fields: [foodId], references: [id])
+  foodId   Int
+  order    Order @relation(fields: [orderId], references: [id])
+  orderId  Int
+  quantity Int   @default(0)
+
+  @@unique([foodId, orderId])
+}
+
+model Phone {
+  id        Int     @id @default(autoincrement())
+  address   Address @relation(fields: [addressId], references: [id])
+  addressId Int
+  number    String  @db.VarChar(11)
+}
+
+model Address {
+  id         Int      @id @default(autoincrement())
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId Int
+  phone      Phone[]
+  street     String   @db.VarChar(255)
+  district   String   @db.VarChar(255)
+  city       String   @db.VarChar(255)
+  email      String   @db.VarChar(255)
+  firstName  String   @db.VarChar(255)
+  lastName   String   @db.VarChar(255)
+}
+
+model Customer {
+  id            Int       @id @default(autoincrement())
+  favoriteFoods Food[]
+  addresses     Address[]
+  username      String    @unique @db.VarChar(255)
+  hashKey       String    @db.VarChar(255)
+}
+
+model Admin {
+  id       Int    @id @default(autoincrement())
+  username String @unique @db.VarChar(255)
+  hashKey  String @db.VarChar(255)
+}

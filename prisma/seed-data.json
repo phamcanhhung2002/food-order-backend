@@ -1,0 +1,50 @@
+{
+  "categories": [
+    {
+      "data": {
+        "name": "Burger",
+        "quantity": 10,
+        "foods": {
+          "createMany": {
+            "data": [
+              {
+                "name": "Next-Level Turkey Burgers with Lemon Aioli",
+                "price": 3,
+                "discount": 2,
+                "quantity": 15,
+                "energy": 200,
+                "rating": 3.5,
+                "introduction": "The secret to chef Dan Kluger's super-moist turkey burgers? A quick brown sugar brine. Add a sofrito of onion, garlic, and jalapeño and top with a zingy lemon aioli and sweet barbecue sauce, and you've got a next-level turkey burger.",
+                "description": "The secret to chef Dan Kluger's super-moist turkey burgers? A quick brown sugar brine. Add a sofrito of onion, garlic, and jalapeño and top with a zingy lemon aioli and sweet barbecue sauce, and you've got a next-level turkey burger.",
+                "createdDate": "2023-10-16T00:00:00.000Z"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "data": {
+        "name": "Sandwich",
+        "quantity": 15,
+        "foods": {
+          "createMany": {
+            "data": [
+              {
+                "name": "Club sandwich",
+                "price": 4.5,
+                "discount": 3.2,
+                "energy": 150,
+                "quantity": 20,
+                "rating": 4,
+                "introduction": "This layered sandwich, a favourite of gastro-pubs across the country, makes a tasty meal for one",
+                "description": "This layered sandwich, a favourite of gastro-pubs across the country, makes a tasty meal for one",
+                "createdDate": "2023-10-15T00:00:00.000Z"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}
