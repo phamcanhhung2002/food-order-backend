@@ -1,3 +1,4 @@
 export * from "./enviroment.js";
 export * from "./seed.js";
-export const apiPrefix = "/api/v1";
+export * from "./api.js";
+export * from "./http-code.js";
