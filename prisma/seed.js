@@ -1,10 +1,10 @@
 import { db } from "../src/utils/db.server.js";
 import fs from "fs";
-import { seedDataPath, encoding } from "../constants/seed.js";
+import { SEED_DATA_PATH, ENCODING } from "../constants/seed.js";
 
 async function seed() {
   let categories, jsonData;
-  fs.readFile(seedDataPath, encoding, async (err, data) => {
+  fs.readFile(SEED_DATA_PATH, ENCODING, async (err, data) => {
     if (err) {
       console.log(`Error reading file from disk: ${err}`);
     } else {
