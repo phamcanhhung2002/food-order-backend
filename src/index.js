@@ -1,8 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
-import { foodRouter } from "./food/food.router.js";
-import { PORT, API_PREFIX, PREFIX } from "../constants/index.js";
-import { signupRouter } from "./signup/signup.router.js";
+import { foodRouter, signupRouter } from "./apis/index.js";
+import { PORT, API_PREFIX, PREFIX } from "./constants/index.js";
 
 if (!PORT) {
   process.exit(1);
