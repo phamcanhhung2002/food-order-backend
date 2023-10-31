@@ -131,10 +131,12 @@ model Customer {
   addresses     Address[]
   username      String    @unique @db.VarChar(255)
   hashPassword  String    @db.VarChar(255)
+  refreshToken  String?   @db.VarChar(1000)
 }
 
 model Admin {
-  id           Int    @id @default(autoincrement())
-  username     String @unique @db.VarChar(255)
-  hashPassword String @db.VarChar(255)
+  id           Int     @id @default(autoincrement())
+  username     String  @unique @db.VarChar(255)
+  hashPassword String  @db.VarChar(255)
+  refreshToken String? @db.VarChar(1000)
 }

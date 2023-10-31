@@ -46,5 +46,13 @@
         }
       }
     }
-  ]
+  ],
+  "customer": {
+    "username": "user",
+    "password": "12345"
+  },
+  "admin": {
+    "username": "admin",
+    "password": "678910"
+  }
 }

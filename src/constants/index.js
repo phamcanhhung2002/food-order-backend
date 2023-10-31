@@ -4,3 +4,5 @@ export * from "./enviroment.js";
 export * from "./http-code.js";
 export * from "./prisma.js";
 export * from "./seed.js";
+export * from "./auth.js";
+export * from "./roles.js";
