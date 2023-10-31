@@ -6,7 +6,7 @@ import {
   HTTP,
 } from "../../constants/index.js";
 import bcrypt from "bcrypt";
-import { db } from "../utils/db.server.js";
+import { db } from "../../utils/db.server.js";
 
 export const register = async (req, res) => {
   const { username, password } = req.body;
