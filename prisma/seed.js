@@ -1,6 +1,8 @@
 import { db } from "../src/utils/db.server.js";
 import fs from "fs";
+import bcrypt from "bcrypt";
 import { SEED_DATA_PATH, ENCODING } from "../constants/seed.js";
+import { SALT_ROUNDS } from "../constants/index.js";
 
 async function seed() {
   let categories, jsonData;
@@ -12,6 +14,22 @@ async function seed() {
       categories = jsonData.categories;
       await db.category.create(categories[0]);
       await db.category.create(categories[1]);
+      const customer = jsonData.customer;
+      const admin = jsonData.admin;
+      const customerHashKey = await bcrypt.hash(customer.password, SALT_ROUNDS);
+      const adminHashKey = await bcrypt.hash(admin.password, SALT_ROUNDS);
+      await db.customer.create({
+        data: {
+          username: customer.username,
+          hashKey: customerHashKey,
+        },
+      });
+      await db.admin.create({
+        data: {
+          username: admin.username,
+          hashKey: adminHashKey,
+        },
+      });
     }
   });
 }
