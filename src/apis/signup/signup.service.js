@@ -6,7 +6,7 @@ import {
   HTTP,
 } from "../../constants/index.js";
 import bcrypt from "bcrypt";
-import { db } from "../../utils/db.server.js";
+import {db} from '../../utils/db.server.js'
 
 export const register = async (req, res) => {
   const { username, password } = req.body;
@@ -28,9 +28,9 @@ export const register = async (req, res) => {
     //encrypt the password
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
     //store the new username
-    const newUser = { username: username, hashPassword: hashedPassword };
+    const newUser = { username: username, hashKey: hashedPassword };
 
-    await db.customer.create({ data: newUser });
+    await db.Customer.create({data:newUser})
 
     res.status(HTTP.CREATED).json({ success: USER_CREATED_MESSAGE(username) });
   } catch (err) {
