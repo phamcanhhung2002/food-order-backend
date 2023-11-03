@@ -6,3 +6,4 @@ export * from "./prisma.js";
 export * from "./seed.js";
 export * from "./auth.js";
 export * from "./roles.js";
+export * from "./db.js";

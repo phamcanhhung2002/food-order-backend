@@ -27,8 +27,9 @@ app.use(`${API_PREFIX}/${PREFIX.SIGNUP}`, signupRouter);
 app.use(`${API_PREFIX}/${PREFIX.LOGIN}`, loginRouter);
 app.use(`${API_PREFIX}/${PREFIX.LOGOUT}`, logoutRouter);
 app.use(`${API_PREFIX}/${PREFIX.REFRESH}`, refreshRouter);
-app.use(verifyJWT);
 app.use(`${API_PREFIX}/${PREFIX.FOOD}`, foodRouter);
+
+app.use(verifyJWT);
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
