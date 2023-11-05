@@ -13,6 +13,13 @@ async function seed() {
     if (err) {
       console.log(`Error reading file from disk: ${err}`);
     } else {
+      // Clear data
+      await db.image.deleteMany({});
+      await db.customer.deleteMany({});
+      await db.admin.deleteMany({});
+      await db.food.deleteMany({});
+      await db.category.deleteMany({});
+      // Read data and create
       jsonData = JSON.parse(data);
       categories = jsonData.categories;
       await db.category.create(categories[0]);
