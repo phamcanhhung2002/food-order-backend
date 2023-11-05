@@ -49,7 +49,7 @@ model Food {
   categoryId   Int
   name         String          @db.VarChar(255)
   price        Float           @db.SmallMoney
-  discount     Float           @db.SmallMoney
+  currentPrice Float           @db.SmallMoney
   energy       Int
   rating       Float
   quantity     Int             @default(0)
