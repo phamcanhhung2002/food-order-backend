@@ -8,7 +8,7 @@ import {
 import bcrypt from "bcrypt";
 import { db } from "../../utils/db.server.js";
 
-export const register = async (req, res) => {
+export const register = async (req, res, next) => {
   const { username, password } = req.body;
   if (!username || !password)
     return res
@@ -34,6 +34,6 @@ export const register = async (req, res) => {
 
     res.status(HTTP.CREATED).json({ success: USER_CREATED_MESSAGE(username) });
   } catch (err) {
-    res.status(HTTP.INTERNAL_SERVER_ERROR).json({ message: err.message });
+    next(err);
   }
 };

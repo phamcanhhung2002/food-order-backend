@@ -37,25 +37,25 @@ const validateParams = (req) => {
   return { page, ord, sort, cat, minPrice, maxPrice, isBadParams };
 };
 
-export const getAllFoods = async (req, res) => {
+export const getAllFoods = async (req, res, next) => {
+  const { page, ord, sort, cat, minPrice, maxPrice, isBadParams } =
+    validateParams(req);
+  if (isBadParams) return res.sendStatus(HTTP.BAD_REQUEST);
+
+  // Caculate skip and take param
+  const skip = (page - 1) * FOODS_PER_PAGE;
+  const take = FOODS_PER_PAGE;
+
+  // Create orderBy
+  const orderBy = {};
+  orderBy[sort] = ord;
+
+  // Create where
+  const where = {};
+  if (cat) where.categoryId = cat;
+  if (minPrice) where.currentPrice = { gte: minPrice, lte: maxPrice };
+
   try {
-    const { page, ord, sort, cat, minPrice, maxPrice, isBadParams } =
-      validateParams(req);
-    if (isBadParams) return res.sendStatus(HTTP.BAD_REQUEST);
-
-    // Caculate skip and take param
-    const skip = (page - 1) * FOODS_PER_PAGE;
-    const take = FOODS_PER_PAGE;
-
-    // Create orderBy
-    const orderBy = {};
-    orderBy[sort] = ord;
-
-    // Create where
-    const where = {};
-    if (cat) where.categoryId = cat;
-    if (minPrice) where.currentPrice = { gte: minPrice, lte: maxPrice };
-
     const numItemsPromise = db.food.count({ where });
     const foodsPromise = db.food.findMany({
       skip,
@@ -90,6 +90,6 @@ export const getAllFoods = async (req, res) => {
       foods,
     });
   } catch (error) {
-    return res.status(HTTP.INTERNAL_SERVER_ERROR).json(error.message);
+    next(error);
   }
 };
