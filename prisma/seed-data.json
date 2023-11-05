@@ -5,39 +5,37 @@
         "name": "Fruit Fry",
         "quantity": 10,
         "foods": {
-          "createMany": {
-            "data": [
-              {
-                "name": "Chinese Tomato Egg Stir Fry",
-                "price": 3,
-                "currentPrice": 2,
-                "quantity": 15,
-                "energy": 217,
-                "rating": 3.5,
-                "images": {
-                  "createMany": {
-                    "data": [
-                      {
-                        "imageId": "j8zjp3dd5cx1oaxor7ot"
-                      },
-                      {
-                        "imageId": "izu5ybnmebrenjmkdik1"
-                      },
-                      {
-                        "imageId": "fjz1i7hfk8scc4unk0mm"
-                      },
-                      {
-                        "imageId": "hfd9peqpqaiifhvrbgdo"
-                      }
-                    ]
-                  }
-                },
-                "introduction": "Chinese tomato egg stir-fry is a beloved classic dish that holds a special place in my heart. Growing up, it was a weekly staple at home. In fact, it is one of the few dishes my dad enjoys cooking because it has a short list of simple ingredients that transform into something delicious. This is one of those special recipes that rewards low effort with high reward. ",
-                "description": "Chinese tomato egg is commonly served with a bowl of jasmine rice. The saucy tomatoes will infuse and permeate through the grains, making each bite of rice exciting. The tomatoes add a slight tang that is balanced with a little sugar, and the gently scrambled eggs add a soft, silky, and velvety texture and soak up all the delicious flavors.",
-                "createdDate": "2023-10-16T00:00:00.000Z"
-              }
-            ]
-          }
+          "create": [
+            {
+              "name": "Chinese Tomato Egg Stir Fry",
+              "price": 3,
+              "currentPrice": 2,
+              "quantity": 15,
+              "energy": 217,
+              "rating": 3.5,
+              "images": {
+                "createMany": {
+                  "data": [
+                    {
+                      "imageId": "j8zjp3dd5cx1oaxor7ot"
+                    },
+                    {
+                      "imageId": "izu5ybnmebrenjmkdik1"
+                    },
+                    {
+                      "imageId": "fjz1i7hfk8scc4unk0mm"
+                    },
+                    {
+                      "imageId": "hfd9peqpqaiifhvrbgdo"
+                    }
+                  ]
+                }
+              },
+              "introduction": "Chinese tomato egg stir-fry is a beloved classic dish that holds a special place in my heart. Growing up, it was a weekly staple at home. In fact, it is one of the few dishes my dad enjoys cooking because it has a short list of simple ingredients that transform into something delicious. This is one of those special recipes that rewards low effort with high reward. ",
+              "description": "Chinese tomato egg is commonly served with a bowl of jasmine rice. The saucy tomatoes will infuse and permeate through the grains, making each bite of rice exciting. The tomatoes add a slight tang that is balanced with a little sugar, and the gently scrambled eggs add a soft, silky, and velvety texture and soak up all the delicious flavors.",
+              "createdDate": "2023-10-16T00:00:00.000Z"
+            }
+          ]
         }
       }
     },
@@ -46,39 +44,37 @@
         "name": "Baked Chicken",
         "quantity": 15,
         "foods": {
-          "createMany": {
-            "data": [
-              {
-                "name": "Juiciest Baked Chicken Breasts Ever",
-                "price": 4.5,
-                "currentPrice": 3.2,
-                "energy": 208,
-                "quantity": 20,
-                "rating": 4,
-                "images": {
-                  "createMany": {
-                    "data": [
-                      {
-                        "imageId": "f2erb1yooak6bw9ysnsm"
-                      },
-                      {
-                        "imageId": "svg9ksxf5ci8le0kian1"
-                      },
-                      {
-                        "imageId": "hdlkfxsmvuscdmimzduk"
-                      },
-                      {
-                        "imageId": "prjtjd9gur1d3jplhqlb"
-                      }
-                    ]
-                  }
-                },
-                "introduction": "Boneless, skinless chicken breasts have a bad reputation for being dry and tough. While chicken breasts are certainly a go-to cut for various dishes due to their convenience, versatility, and quick cook time, no one likes a dry chicken breast. It’s time to change all of that with this recipe for tender and juicy chicken breasts, every time. ",
-                "description": "Boneless, skinless chicken breasts have a bad reputation for being dry and tough. While chicken breasts are certainly a go-to cut for various dishes due to their convenience, versatility, and quick cook time, no one likes a dry chicken breast. It’s time to change all of that with this recipe for tender and juicy chicken breasts, every time. ",
-                "createdDate": "2023-10-15T00:00:00.000Z"
-              }
-            ]
-          }
+          "create": [
+            {
+              "name": "Juiciest Baked Chicken Breasts Ever",
+              "price": 4.5,
+              "currentPrice": 3.2,
+              "energy": 208,
+              "quantity": 20,
+              "rating": 4,
+              "images": {
+                "createMany": {
+                  "data": [
+                    {
+                      "imageId": "f2erb1yooak6bw9ysnsm"
+                    },
+                    {
+                      "imageId": "svg9ksxf5ci8le0kian1"
+                    },
+                    {
+                      "imageId": "hdlkfxsmvuscdmimzduk"
+                    },
+                    {
+                      "imageId": "prjtjd9gur1d3jplhqlb"
+                    }
+                  ]
+                }
+              },
+              "introduction": "Boneless, skinless chicken breasts have a bad reputation for being dry and tough. While chicken breasts are certainly a go-to cut for various dishes due to their convenience, versatility, and quick cook time, no one likes a dry chicken breast. It’s time to change all of that with this recipe for tender and juicy chicken breasts, every time. ",
+              "description": "Boneless, skinless chicken breasts have a bad reputation for being dry and tough. While chicken breasts are certainly a go-to cut for various dishes due to their convenience, versatility, and quick cook time, no one likes a dry chicken breast. It’s time to change all of that with this recipe for tender and juicy chicken breasts, every time. ",
+              "createdDate": "2023-10-15T00:00:00.000Z"
+            }
+          ]
         }
       }
     }
@@ -90,5 +86,6 @@
   "admin": {
     "username": "admin",
     "password": "678910"
-  }
+  },
+  "images": {}
 }
