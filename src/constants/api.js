@@ -8,6 +8,7 @@ export const PREFIX = {
   LOGOUT: "logout",
   CUSTOMER: "customers",
   ADMIN: "admins",
+  CATEGORY: "categories"
 };
 
 export const CORS_OPTION = {
