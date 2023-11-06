@@ -3,7 +3,6 @@
     {
       "data": {
         "name": "Fruit Fry",
-        "quantity": 10,
         "foods": {
           "create": [
             {
@@ -42,7 +41,6 @@
     {
       "data": {
         "name": "Baked Chicken",
-        "quantity": 15,
         "foods": {
           "create": [
             {

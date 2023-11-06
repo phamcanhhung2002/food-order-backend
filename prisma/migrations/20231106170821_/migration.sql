@@ -6,7 +6,6 @@ BEGIN TRAN;
 CREATE TABLE [dbo].[Category] (
     [id] INT NOT NULL IDENTITY(1,1),
     [name] VARCHAR(255) NOT NULL,
-    [quantity] INT NOT NULL CONSTRAINT [Category_quantity_df] DEFAULT 0,
     CONSTRAINT [Category_pkey] PRIMARY KEY CLUSTERED ([id])
 );
 

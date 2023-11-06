@@ -5,7 +5,8 @@ export const categoryRouter = express.Router();
 
 categoryRouter.get('/' , categoryController.getAll);
 categoryRouter.post( '/', categoryController.add)
-categoryRouter.delete('/:id', categoryController.remove)
 categoryRouter.put('/', categoryController.update)
+categoryRouter.delete('/:id', categoryController.remove)
+categoryRouter.post('/set-food', categoryController.setCategoryFood)
 
 
