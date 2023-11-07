@@ -9,10 +9,11 @@ import {
   signupRouter,
   refreshRouter,
   discountRouter,
+  checkoutRouter,
+  RatingRouter
 } from "./apis/index.js";
 import { PORT, API_PREFIX, PREFIX, CORS_OPTION } from "./constants/index.js";
 import { verifyJWT } from "./middlewares/verify-jwt.js";
-
 if (!PORT) {
   process.exit(1);
 }
@@ -29,8 +30,10 @@ app.use(`${API_PREFIX}/${PREFIX.LOGIN}`, loginRouter);
 app.use(`${API_PREFIX}/${PREFIX.LOGOUT}`, logoutRouter);
 app.use(`${API_PREFIX}/${PREFIX.REFRESH}`, refreshRouter);
 app.use(`${API_PREFIX}/${PREFIX.DISCOUNT}`, discountRouter);
-app.use(verifyJWT);
+app.use(`${API_PREFIX}/${PREFIX.CHECKOUT}`, checkoutRouter);
 app.use(`${API_PREFIX}/${PREFIX.FOOD}`, foodRouter);
+app.use(`${API_PREFIX}/${PREFIX.RATING}`, RatingRouter);
+app.use(verifyJWT);
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
