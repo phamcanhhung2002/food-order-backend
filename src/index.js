@@ -14,6 +14,8 @@ import {
 } from "./apis/index.js";
 import { PORT, API_PREFIX, PREFIX, CORS_OPTION } from "./constants/index.js";
 import { verifyJWT } from "./middlewares/verify-jwt.js";
+import { errorHandler } from "./middlewares/error-handler.js";
+
 if (!PORT) {
   process.exit(1);
 }
@@ -34,6 +36,10 @@ app.use(`${API_PREFIX}/${PREFIX.CHECKOUT}`, checkoutRouter);
 app.use(`${API_PREFIX}/${PREFIX.FOOD}`, foodRouter);
 app.use(`${API_PREFIX}/${PREFIX.RATING}`, RatingRouter);
 app.use(verifyJWT);
+
+app.use(verifyJWT);
+
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
