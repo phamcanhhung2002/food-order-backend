@@ -1,3 +1,6 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -17,32 +20,33 @@ model Category {
 model Tag {
   id    Int    @id @default(autoincrement())
   name  String @db.VarChar(255)
-  foods Food[] @relation("FoodToTag")
+  foods Food[]
 }
 
 model Menu {
   id    Int    @id @default(autoincrement())
   name  String @db.VarChar(255)
-  foods Food[] @relation("FoodToMenu")
+  foods Food[]
 }
 
 model Image {
   id      Int    @id @default(autoincrement())
+  food    Food   @relation(fields: [foodId], references: [id])
   foodId  Int
   imageId String @db.VarChar(255)
-  food    Food   @relation(fields: [foodId], references: [id])
 }
 
 model Review {
   id      Int    @id @default(autoincrement())
+  food    Food   @relation(fields: [foodId], references: [id])
   foodId  Int
   content String @db.Text
-  food    Food   @relation(fields: [foodId], references: [id])
 }
 
 model Food {
   id           Int             @id @default(autoincrement())
-  categoryId   Int  
+  category     Category        @relation(fields: [categoryId], references: [id])
+  categoryId   Int
   name         String          @db.VarChar(255)
   price        Float           @db.SmallMoney
   currentPrice Float           @db.SmallMoney
@@ -52,22 +56,21 @@ model Food {
   introduction String
   description  String
   createdDate  DateTime
-  category     Category        @relation(fields: [categoryId], references: [id])
-  orders       FoodsOnOrders[]
-  images       Image[]
+  tags         Tag[]
   reviews      Review[]
-  customers    Customer[]      @relation("CustomerToFood")
-  menus        Menu[]          @relation("FoodToMenu")
-  tags         Tag[]           @relation("FoodToTag")
+  menus        Menu[]
+  images       Image[]
+  orders       FoodsOnOrders[]
+  customers    Customer[]
 }
 
 model Voucher {
   id          Int     @id @default(autoincrement())
+  orders      Order[]
   minOrder    Int
   discount    Float   @db.SmallMoney
   description String  @db.VarChar(255)
   code        String  @db.VarChar(255)
-  orders      Order[]
 }
 
 model Status {
@@ -78,7 +81,10 @@ model Status {
 
 model Order {
   id           Int             @id @default(autoincrement())
+  voucher      Voucher         @relation(fields: [voucherId], references: [id])
   voucherId    Int
+  foods        FoodsOnOrders[]
+  status       Status          @relation(fields: [statusId], references: [id])
   statusId     Int
   subTotal     Float           @db.SmallMoney
   deliveryFee  Float           @db.SmallMoney
@@ -86,52 +92,51 @@ model Order {
   expectedTime DateTime
   completeTime DateTime
   shipperPhone String          @db.VarChar(255)
-  foods        FoodsOnOrders[]
-  status       Status          @relation(fields: [statusId], references: [id])
-  voucher      Voucher         @relation(fields: [voucherId], references: [id])
 }
 
 model FoodsOnOrders {
   id       Int   @id @default(autoincrement())
+  food     Food  @relation(fields: [foodId], references: [id])
   foodId   Int
+  order    Order @relation(fields: [orderId], references: [id])
   orderId  Int
   quantity Int   @default(0)
-  food     Food  @relation(fields: [foodId], references: [id])
-  order    Order @relation(fields: [orderId], references: [id])
 
   @@unique([foodId, orderId])
 }
 
 model Phone {
   id        Int     @id @default(autoincrement())
+  address   Address @relation(fields: [addressId], references: [id])
   addressId Int
   number    String  @db.VarChar(11)
-  address   Address @relation(fields: [addressId], references: [id])
 }
 
 model Address {
   id         Int      @id @default(autoincrement())
+  customer   Customer @relation(fields: [customerId], references: [id])
   customerId Int
+  phone      Phone[]
   street     String   @db.VarChar(255)
   district   String   @db.VarChar(255)
   city       String   @db.VarChar(255)
   email      String   @db.VarChar(255)
   firstName  String   @db.VarChar(255)
   lastName   String   @db.VarChar(255)
-  customer   Customer @relation(fields: [customerId], references: [id])
-  phone      Phone[]
 }
 
 model Customer {
   id            Int       @id @default(autoincrement())
-  username      String    @unique @db.VarChar(255)
-  hashKey       String    @db.VarChar(255)
+  favoriteFoods Food[]
   addresses     Address[]
-  favoriteFoods Food[]    @relation("CustomerToFood")
+  username      String    @unique @db.VarChar(255)
+  hashPassword  String    @db.VarChar(255)
+  refreshToken  String?   @db.VarChar(1000)
 }
 
 model Admin {
-  id       Int    @id @default(autoincrement())
-  username String @unique @db.VarChar(255)
-  hashKey  String @db.VarChar(255)
+  id           Int     @id @default(autoincrement())
+  username     String  @unique @db.VarChar(255)
+  hashPassword String  @db.VarChar(255)
+  refreshToken String? @db.VarChar(1000)
 }

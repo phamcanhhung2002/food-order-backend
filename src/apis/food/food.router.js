@@ -3,14 +3,7 @@ import * as FoodService from "./food.service.js";
 
 export const foodRouter = express.Router();
 
-foodRouter.get("/", async (req, res) => {
-  try {
-    const foods = await FoodService.getAllFoods();
-      return res.status(HTTP.OK).json({ foods });
-  } catch (error) {
-    return res.status(HTTP.INTERNAL_SERVER_ERROR).json(error.message);
-  }
-});
+foodRouter.get("/", FoodService.getAllFoods);
 foodRouter.post("/add",async(req,res)=>{
   try{
     const addFood=await FoodService.addFood({...req.body,categoryId:req.body.categoryId})

@@ -36,9 +36,6 @@ app.use(`${API_PREFIX}/${PREFIX.CHECKOUT}`, checkoutRouter);
 app.use(`${API_PREFIX}/${PREFIX.FOOD}`, foodRouter);
 app.use(`${API_PREFIX}/${PREFIX.RATING}`, RatingRouter);
 app.use(verifyJWT);
-
-app.use(verifyJWT);
-
 app.use(errorHandler);
 
 app.listen(PORT, () => {

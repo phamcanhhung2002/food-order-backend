@@ -1,7 +1,5 @@
 import { db } from "../../utils/db.server.js";
-import {
-  HTTP
-} from "../../constants/index.js";
+import { HTTP } from "../../constants/index.js";
 import * as discountService from "../discount/discount.service.js"
 /* payload
     {
@@ -11,7 +9,7 @@ import * as discountService from "../discount/discount.service.js"
             {
                 productId,
                 price,
-                quantity
+                quantity    
                 },
             {
                 productId,
