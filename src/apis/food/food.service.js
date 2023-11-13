@@ -65,11 +65,7 @@ export const getAllFoods = async (req, res, next) => {
         name: true,
         price: true,
         currentPrice: true,
-        images: {
-          select: {
-            imageId: true,
-          },
-        },
+        featuredImageId: true,
       },
       where,
       orderBy,

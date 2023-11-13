@@ -34,7 +34,6 @@ export const logout = (userType) => {
         },
       });
       res.clearCookie(AUTH_TYPE, COOKIE.CLEAR_OPTION);
-      res.clearCookie(USER_ID, COOKIE.CLEAR_OPTION);
       res.sendStatus(HTTP.NO_CONTENT);
     } catch (err) {
       next(err);

@@ -10,8 +10,9 @@ import {
   REQUIRED_INFO_MESSAGE,
   RERESH_TK_EXP_TIME,
   HTTP,
-  USER_ID,
   USER_TABLE_NAME,
+  STATUS,
+  USER_ROLES,
 } from "../../constants/index.js";
 
 export const login = (userType) => {
@@ -25,6 +26,23 @@ export const login = (userType) => {
 
     try {
       const foundUser = await db[userTableName].findUnique({
+        include:
+          userType === USER_ROLES.CUSTOMER
+            ? {
+                orders: {
+                  where: {
+                    status: STATUS.PENDING,
+                  },
+                  select: {
+                    _count: {
+                      select: {
+                        foods: true,
+                      },
+                    },
+                  },
+                },
+              }
+            : {},
         where: {
           username,
         },
@@ -64,8 +82,14 @@ export const login = (userType) => {
       });
 
       res.cookie(AUTH_TYPE, refreshToken, COOKIE.OPTION);
-      res.cookie(USER_ID, foundUser.id);
-      res.json({ accessToken });
+      res.json({
+        accessToken,
+        userId: foundUser.id,
+        numOfFoodsInOrder:
+          userType === USER_ROLES.CUSTOMER
+            ? foundUser.orders[0]?._count.foods || 0
+            : undefined,
+      });
     } catch (err) {
       next(err);
     }
