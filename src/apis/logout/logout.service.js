@@ -4,37 +4,39 @@ import { USER_TABLE_NAME } from "../../constants/index.js";
 
 export const logout = (userType) => {
   const userTableName = USER_TABLE_NAME(userType);
-  return async (req, res) => {
+  return async (req, res, next) => {
     // On client, also delete the accessToken
 
     const cookies = req.cookies;
+    const refreshToken = cookies?.jwt;
+    if (!refreshToken) return res.sendStatus(HTTP.NO_CONTENT); //No content
 
-    if (!cookies?.jwt) return res.sendStatus(HTTP.NO_CONTENT); //No content
-    const refreshToken = cookies.jwt;
+    try {
+      // Is refreshToken in db?
+      const foundUser = await db[userTableName].findFirst({
+        where: {
+          refreshToken,
+        },
+      });
 
-    // Is refreshToken in db?
-    const foundUser = await db[userTableName].findFirst({
-      where: {
-        refreshToken,
-      },
-    });
+      if (!foundUser) {
+        res.clearCookie(AUTH_TYPE, COOKIE.CLEAR_OPTION);
+        return res.sendStatus(HTTP.NO_CONTENT);
+      }
 
-    if (!foundUser) {
+      // Delete refreshToken in db
+      await db[userTableName].update({
+        where: {
+          id: foundUser.id,
+        },
+        data: {
+          refreshToken: null,
+        },
+      });
       res.clearCookie(AUTH_TYPE, COOKIE.CLEAR_OPTION);
       return res.sendStatus(HTTP.NO_CONTENT);
+    } catch (err) {
+      next(err);
     }
-
-    // Delete refreshToken in db
-    await db[userTableName].update({
-      where: {
-        id: foundUser.id,
-      },
-      data: {
-        refreshToken: null,
-      },
-    });
-    res.clearCookie(AUTH_TYPE, COOKIE.CLEAR_OPTION);
-    res.clearCookie(USER_ID, COOKIE.CLEAR_OPTION);
-    res.sendStatus(HTTP.NO_CONTENT);
   };
 };

@@ -15,16 +15,16 @@ export const register = async (req, res, next) => {
       .status(HTTP.BAD_REQUEST)
       .json({ message: REQUIRED_INFO_MESSAGE });
   // check for duplicate usernames in the db
-  const duplicate = await db.customer.findUnique({
-    where: {
-      username,
-    },
-  });
-
-  if (duplicate)
-    return res.status(HTTP.CONFLICT).json({ message: CONFLICT_USER_MESSAGE }); //Conflict
-
   try {
+    const duplicate = await db.customer.findUnique({
+      where: {
+        username,
+      },
+    });
+
+    if (duplicate)
+      return res.status(HTTP.CONFLICT).json({ message: CONFLICT_USER_MESSAGE }); //Conflict
+
     //encrypt the password
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
     //store the new username
@@ -32,7 +32,9 @@ export const register = async (req, res, next) => {
 
     await db.customer.create({ data: newUser });
 
-    res.status(HTTP.CREATED).json({ success: USER_CREATED_MESSAGE(username) });
+    return res
+      .status(HTTP.CREATED)
+      .json({ success: USER_CREATED_MESSAGE(username) });
   } catch (err) {
     next(err);
   }
