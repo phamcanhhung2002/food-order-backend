@@ -110,7 +110,7 @@ export const getOrder = async (req, res, next) => {
     // Find the current order
     const order = await findCurrentOrder(orderSelect, customerId);
 
-    return res.status(HTTP.OK).json({ order });
+    return res.json({ order });
   } catch (e) {
     next(e);
   }
@@ -170,7 +170,7 @@ export const addFoodToOrder = async (req, res, next) => {
       await updateOrder(currentOrder.id, foodId, food.currentPrice);
     }
 
-    return res.status(HTTP.OK).json({ message: ADD_FOOD_TO_ORDER(food.name) });
+    return res.json({ message: ADD_FOOD_TO_ORDER(food.name) });
   } catch (err) {
     next(err);
   }
@@ -248,9 +248,9 @@ export const updateQuantityOfFoodInOrder = async (req, res, next) => {
       },
     });
     await db.$transaction([foodsOnOrdersPromise, orderPromise]);
-    return res
-      .status(HTTP.OK)
-      .json({ message: UPDATE_FOOD_IN_ORDER(currentFoodsOnOrders.food.name) });
+    return res.json({
+      message: UPDATE_FOOD_IN_ORDER(currentFoodsOnOrders.food.name),
+    });
   } catch (err) {
     if (err.code === PRISMA.RECORD_NOT_FOUND) {
       return res
@@ -334,9 +334,9 @@ export const removeFoodFromOrder = async (req, res, next) => {
       });
     }
 
-    return res
-      .status(HTTP.OK)
-      .json({ message: REMOVE_FOOD_FROM_ORDER(foodsOnOrders.food.name) });
+    return res.json({
+      message: REMOVE_FOOD_FROM_ORDER(foodsOnOrders.food.name),
+    });
   } catch (err) {
     next(err);
   }

@@ -39,7 +39,7 @@ export const refreshToken = (userType) => {
           ACCESS_TOKEN_SECRET,
           { expiresIn: ACCESS_TK_EXP_TIME }
         );
-        res.json({ accessToken });
+        return res.json({ accessToken });
       });
     } catch (err) {
       next(err);

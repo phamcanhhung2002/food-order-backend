@@ -32,7 +32,9 @@ export const register = async (req, res, next) => {
 
     await db.customer.create({ data: newUser });
 
-    res.status(HTTP.CREATED).json({ success: USER_CREATED_MESSAGE(username) });
+    return res
+      .status(HTTP.CREATED)
+      .json({ success: USER_CREATED_MESSAGE(username) });
   } catch (err) {
     next(err);
   }

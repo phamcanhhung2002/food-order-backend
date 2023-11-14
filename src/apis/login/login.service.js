@@ -82,7 +82,7 @@ export const login = (userType) => {
       });
 
       res.cookie(AUTH_TYPE, refreshToken, COOKIE.OPTION);
-      res.json({
+      return res.json({
         accessToken,
         userId: foundUser.id,
         numOfFoodsInOrder:

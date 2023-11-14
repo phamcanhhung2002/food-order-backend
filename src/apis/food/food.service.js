@@ -78,7 +78,7 @@ export const getAllFoods = async (req, res, next) => {
 
     const numPages = Math.ceil(numItems / FOODS_PER_PAGE);
 
-    return res.status(HTTP.OK).json({
+    return res.json({
       pagination: {
         numItems,
         numPages,

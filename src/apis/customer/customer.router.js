@@ -10,7 +10,7 @@ export const customerRouter = express.Router();
 customerRouter.get(
   "/:customerId/order",
   param("customerId").isInt({ min: 0 }).toInt(),
-  verifyRoles([USER_ROLES.CUSTOMER, USER_ROLES.ADMIN]),
+  verifyRoles([USER_ROLES.CUSTOMER]),
   verifyUser("customer"),
   CustomerService.getOrder
 );
