@@ -15,5 +15,5 @@ export const UPDATE_FOOD_IN_ORDER = (foodName) =>
   `Update ${foodName} in cart successfully!`;
 export const PRISMA = {
   FOREIGN_KEY_FAILED: "P2003",
-  ENTITY_NOT_FOUND: "P2025",
+  RECORD_NOT_FOUND: "P2025",
 };
