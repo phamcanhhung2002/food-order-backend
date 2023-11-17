@@ -44,24 +44,25 @@ model Review {
 }
 
 model Food {
-  id           Int             @id @default(autoincrement())
-  category     Category        @relation(fields: [categoryId], references: [id])
-  categoryId   Int
-  name         String          @db.VarChar(255)
-  price        Float           @db.SmallMoney
-  currentPrice Float           @db.SmallMoney
-  energy       Int
-  rating       Float
-  quantity     Int             @default(0)
-  introduction String
-  description  String
-  createdDate  DateTime
-  tags         Tag[]
-  reviews      Review[]
-  menus        Menu[]
-  images       Image[]
-  orders       FoodsOnOrders[]
-  customers    Customer[]
+  id              Int             @id @default(autoincrement())
+  category        Category        @relation(fields: [categoryId], references: [id])
+  categoryId      Int
+  name            String          @db.VarChar(255)
+  price           Float           @db.SmallMoney
+  currentPrice    Float           @db.SmallMoney
+  energy          Int
+  rating          Float
+  quantity        Int             @default(0)
+  introduction    String
+  description     String
+  createdDate     DateTime
+  featuredImageId String          @db.VarChar(255)
+  tags            Tag[]
+  reviews         Review[]
+  menus           Menu[]
+  images          Image[]
+  orders          FoodsOnOrders[]
+  customers       Customer[]
 }
 
 model Voucher {
@@ -73,25 +74,20 @@ model Voucher {
   code        String  @db.VarChar(255)
 }
 
-model Status {
-  id     Int     @id @default(autoincrement())
-  name   String  @db.VarChar(255)
-  orders Order[]
-}
-
 model Order {
   id           Int             @id @default(autoincrement())
-  voucher      Voucher         @relation(fields: [voucherId], references: [id])
-  voucherId    Int
+  voucher      Voucher?        @relation(fields: [voucherId], references: [id])
+  voucherId    Int?
   foods        FoodsOnOrders[]
-  status       Status          @relation(fields: [statusId], references: [id])
-  statusId     Int
+  status       Int             @default(0)
   subTotal     Float           @db.SmallMoney
-  deliveryFee  Float           @db.SmallMoney
-  tax          Decimal         @db.Decimal(4, 2)
-  expectedTime DateTime
-  completeTime DateTime
-  shipperPhone String          @db.VarChar(255)
+  deliveryFee  Float           @default(0) @db.SmallMoney
+  tax          Decimal         @default(0) @db.Decimal(4, 2)
+  expectedTime DateTime?
+  completeTime DateTime?
+  shipperPhone String?         @db.VarChar(255)
+  Customer     Customer        @relation(fields: [customerId], references: [id])
+  customerId   Int
 }
  
 model FoodsOnOrders {
@@ -100,7 +96,7 @@ model FoodsOnOrders {
   foodId   Int
   order    Order @relation(fields: [orderId], references: [id])
   orderId  Int
-  quantity Int   @default(0)
+  quantity Int   @default(1)
 
   @@unique([foodId, orderId])
 }
@@ -129,6 +125,7 @@ model Customer {
   id            Int       @id @default(autoincrement())
   favoriteFoods Food[]
   addresses     Address[]
+  orders        Order[]
   username      String    @unique @db.VarChar(255)
   hashPassword  String    @db.VarChar(255)
   refreshToken  String?   @db.VarChar(1000)
