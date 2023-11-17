@@ -18,6 +18,7 @@ class CategoryController {
         return {
           id: category.id,
           name: category.name,
+          imageId: category.imageId,
           quantity: category.foods.length,
         };
       });
@@ -32,28 +33,28 @@ class CategoryController {
   };
 
   add = async (req, res, next) => {
-    const { name } = req.body;
-    console.log(req.params);
+    const { name, imageId } = req.body;
     if (!name) {
       res.status(HTTP.BAD_REQUEST).json({
         message: "Invalid body request",
-      });
+      }); 
     }
 
     try {
       const newCategory = await db.category.create({
         data: {
           name,
+          imageId
         },
       });
-
-      console.log(newCategory);
 
       res.status(200).json({
         message: "Category added successfully",
         data: newCategory,
       });
-    } catch (error) {}
+    } catch (error) {
+      next(error)
+    }
   };
 
   remove = async (req, res, next) => {
@@ -81,25 +82,20 @@ class CategoryController {
         message: `Category id ${id} deleted successfully`,
       });
     } catch (error) {
-      next(error);
+      res.status(404).json({message: error.message});
     }
   };
 
   update = async (req, res, next) => {
-    const { id, name, quantity } = req.body;
-    if (!id) res.sendStatus(HTTP.BAD_REQUEST);
-    if (quantity < 0) {
-      res.status(200).json({
-        message: "Category added successfully",
-        data: newCategory,
-      });
-    }
+    const { id, name, imageId } = req.body;
+    if (!id) sendStatus(HTTP.BAD_REQUEST);
     try {
       const category = await db.category.findUnique({
         where: {
           id: parseInt(id),
         },
       });
+      console.log(category)
       if (!category)
         res.status(404).json({
           message: "Category not found",
@@ -111,7 +107,7 @@ class CategoryController {
         },
         data: {
           name,
-          quantity,
+          imageId,
         },
       });
 

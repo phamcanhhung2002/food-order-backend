@@ -13,6 +13,7 @@ datasource db {
 model Category {
   id       Int    @id @default(autoincrement())
   name     String @db.VarChar(255)
+  imageId  String @db.VarChar(255)
   foods    Food[]
 }
 
@@ -103,7 +104,7 @@ model FoodsOnOrders {
 
   @@unique([foodId, orderId])
 }
-
+ 
 model Phone {
   id        Int     @id @default(autoincrement())
   address   Address @relation(fields: [addressId], references: [id])

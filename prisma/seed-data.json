@@ -3,6 +3,7 @@
     {
       "data": {
         "name": "Fruit Fry",
+        "imageId": "z1i7hfk8scc4unc4124",
         "foods": {
           "create": [
             {
@@ -41,6 +42,7 @@
     {
       "data": {
         "name": "Baked Chicken",
+        "imageId": "f7hfk8scc4unc1230",
         "foods": {
           "create": [
             {
