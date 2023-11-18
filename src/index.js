@@ -8,9 +8,13 @@ import {
   logoutRouter,
   signupRouter,
   refreshRouter,
+<<<<<<< HEAD
   discountRouter,
   checkoutRouter,
   RatingRouter
+=======
+  customerRouter,
+>>>>>>> 17d978125a22f23e2aacc0adaced74506bc0c301
 } from "./apis/index.js";
 import { PORT, API_PREFIX, PREFIX, CORS_OPTION } from "./constants/index.js";
 import { verifyJWT } from "./middlewares/verify-jwt.js";
@@ -36,6 +40,9 @@ app.use(`${API_PREFIX}/${PREFIX.CHECKOUT}`, checkoutRouter);
 app.use(`${API_PREFIX}/${PREFIX.FOOD}`, foodRouter);
 app.use(`${API_PREFIX}/${PREFIX.RATING}`, RatingRouter);
 app.use(verifyJWT);
+
+app.use(`${API_PREFIX}/${PREFIX.CUSTOMER}`, customerRouter);
+
 app.use(errorHandler);
 
 app.listen(PORT, () => {

@@ -17,7 +17,7 @@ discountRouter.post("/create",async(req,res)=>{
 
     }
 });
-discountRouter.post("/getdiscountamount",async(req,res)=>{
+discountRouter.get("/getdiscountamount",async(req,res)=>{
     try{
         const result=await discountService.getDiscountAmount({...req.body,codeId:req.body.codeId})
         return res.status(HTTP.OK).json({ 

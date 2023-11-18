@@ -10,35 +10,39 @@ import jwt from "jsonwebtoken";
 
 export const refreshToken = (userType) => {
   const userTableName = USER_TABLE_NAME(userType);
-  return async (req, res) => {
+  return async (req, res, next) => {
     const cookies = req.cookies;
 
-    if (!cookies?.jwt) return res.sendStatus(HTTP.UNAUTHORIZED);
-    const refreshToken = cookies.jwt;
+    const refreshToken = cookies?.jwt;
+    if (!refreshToken) return res.sendStatus(HTTP.UNAUTHORIZED);
 
-    const foundUser = await db[userTableName].findFirst({
-      where: {
-        refreshToken,
-      },
-    });
-
-    if (!foundUser) return res.sendStatus(HTTP.FORBIDDEN); //Forbidden
-    // evaluate jwt
-    jwt.verify(refreshToken, REFRESH_TOKEN_SECRET, (err, decoded) => {
-      if (err || foundUser.id !== decoded.userId)
-        return res.sendStatus(HTTP.FORBIDDEN);
-      const roles = [userType];
-      const accessToken = jwt.sign(
-        {
-          userInfo: {
-            id: decoded.userId,
-            roles,
-          },
+    try {
+      const foundUser = await db[userTableName].findFirst({
+        where: {
+          refreshToken,
         },
-        ACCESS_TOKEN_SECRET,
-        { expiresIn: ACCESS_TK_EXP_TIME }
-      );
-      res.json({ accessToken });
-    });
+      });
+
+      if (!foundUser) return res.sendStatus(HTTP.FORBIDDEN); //Forbidden
+      // evaluate jwt
+      jwt.verify(refreshToken, REFRESH_TOKEN_SECRET, (err, decoded) => {
+        if (err || foundUser.id !== decoded.userId)
+          return res.sendStatus(HTTP.FORBIDDEN);
+        const roles = [userType];
+        const accessToken = jwt.sign(
+          {
+            userInfo: {
+              id: decoded.userId,
+              roles,
+            },
+          },
+          ACCESS_TOKEN_SECRET,
+          { expiresIn: ACCESS_TK_EXP_TIME }
+        );
+        return res.json({ accessToken });
+      });
+    } catch (err) {
+      next(err);
+    }
   };
 };
