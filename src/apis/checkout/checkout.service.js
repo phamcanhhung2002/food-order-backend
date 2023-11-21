@@ -32,13 +32,14 @@ const checkProductByServer=async(foods)=>{
         }
     }))
 }
-export const checkoutReview=async({foods,discountCodeId})=>{
-    // const foundOrder=await db.Order.findFirst({where:{id:orderId}})
-    // if(!foundOrder) return console.log(`Order no found`,HTTP.BAD_REQUEST)
+export const checkoutReview=async({orderId,foods,discountCodeId})=>{
+    const foundOrder=await db.FoodsOnOrders.findFirst({where:{id:orderId}})
+    if(!foundOrder) return console.log(`Order no found`,HTTP.BAD_REQUEST)
     const foundDiscocunt=await db.Voucher.findFirst({where:{code:discountCodeId}})
     if(!foundDiscocunt) return console.log(`Discount no found `,HTTP.BAD_REQUEST)
     const checkout_order={totalPrice:0,feeship:0,totalDiscount:0,totalCheckOut:0,tax:0}
     const foods_new=[]
+    
     const checkProductServer=await checkProductByServer(foods)
     if(!checkProductServer) return console.log('food in order invalid, check again',HTTP.BAD_REQUEST)
     const checkOutPrice= await checkProductServer.reduce((acc,food)=>{
@@ -68,5 +69,11 @@ export const checkoutReview=async({foods,discountCodeId})=>{
         foods_new:foods_new,
         checkout_order
     }
+}
+export const checkoutReviewVer2=async ({orderId,address})=>{
+    const foundOrder=await db.FoodsOnOrders.findFirst({where:{id:orderId}})
+    if(!foundOrder) return console.log(`Order no found`,HTTP.BAD_REQUEST)
+    await db.Order.update({where:{id:orderId},data:{status:1},})
+    return address
 }
     

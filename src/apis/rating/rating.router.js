@@ -2,9 +2,9 @@ import express from "express";
 import { DESC,HTTP } from "../../constants/index.js";
 import * as ratingService from "./rating.service.js";
 
-export const RatingRouter = express.Router();
+export const ratingRouter = express.Router();
 
-RatingRouter.get("/mostloved",async(req,res)=>{
+ratingRouter.get("/mostloved",async(req,res)=>{
     try{
         const mostLoved=await ratingService.mostLoved()
         return res.status(HTTP.OK).json({ 

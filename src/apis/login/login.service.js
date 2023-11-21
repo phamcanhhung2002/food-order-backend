@@ -20,12 +20,13 @@ export const login = (userType) => {
   return async (req, res, next) => {
     const { username, password } = req.body;
     if (!username || !password)
-      return res
-        .status(HTTP.BAD_REQUEST)
-        .json({ message: REQUIRED_INFO_MESSAGE });
-
-    try {
-      const foundUser = await db[userTableName].findUnique({
+    return res
+  .status(HTTP.BAD_REQUEST)
+  .json({ message: REQUIRED_INFO_MESSAGE });
+  
+  try {
+    console.log(userTableName)
+    const foundUser = await db[userTableName].findUnique({
         include:
           userType === USER_ROLES.CUSTOMER
             ? {
@@ -64,6 +65,7 @@ export const login = (userType) => {
         ACCESS_TOKEN_SECRET,
         { expiresIn: ACCESS_TK_EXP_TIME }
       );
+      console.log(`:::::::${accessToken}`)
       const refreshToken = jwt.sign(
         { userId: foundUser.id },
         REFRESH_TOKEN_SECRET,
