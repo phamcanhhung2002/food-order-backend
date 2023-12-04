@@ -25,7 +25,6 @@ export const login = (userType) => {
   .json({ message: REQUIRED_INFO_MESSAGE });
   
   try {
-    console.log(userTableName)
     const foundUser = await db[userTableName].findUnique({
         include:
           userType === USER_ROLES.CUSTOMER
@@ -65,7 +64,7 @@ export const login = (userType) => {
         ACCESS_TOKEN_SECRET,
         { expiresIn: ACCESS_TK_EXP_TIME }
       );
-      console.log(`:::::::${accessToken}`)
+
       const refreshToken = jwt.sign(
         { userId: foundUser.id },
         REFRESH_TOKEN_SECRET,
