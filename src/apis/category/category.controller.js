@@ -23,7 +23,7 @@ class CategoryController {
         };
       });
 
-      res.status(200).json({
+      return res.status(200).json({
         categories: responseData,
       });
     } catch (error) {
@@ -35,7 +35,7 @@ class CategoryController {
   add = async (req, res, next) => {
     const { name, imageId } = req.body;
     if (!name) {
-      res.status(HTTP.BAD_REQUEST).json({
+      return res.status(HTTP.BAD_REQUEST).json({
         message: "Invalid body request",
       }); 
     }
@@ -48,7 +48,7 @@ class CategoryController {
         },
       });
 
-      res.status(200).json({
+      return res.status(200).json({
         message: "Category added successfully",
         data: newCategory,
       });
@@ -68,7 +68,7 @@ class CategoryController {
         },
       });
       if (!category)
-        res.status(404).json({
+        return res.status(404).json({
           message: "Category not found",
         });
 
@@ -78,17 +78,17 @@ class CategoryController {
         },
       });
 
-      res.status(200).json({
+      return res.status(200).json({
         message: `Category id ${id} deleted successfully`,
       });
     } catch (error) {
-      res.status(404).json({message: error.message});
+      return res.status(404).json({message: error.message});
     }
   };
 
   update = async (req, res, next) => {
     const { id, name, imageId } = req.body;
-    if (!id) sendStatus(HTTP.BAD_REQUEST);
+    if (!id) return res.sendStatus(HTTP.BAD_REQUEST);
     try {
       const category = await db.category.findUnique({
         where: {
@@ -97,7 +97,7 @@ class CategoryController {
       });
       console.log(category)
       if (!category)
-        res.status(404).json({
+        return res.status(404).json({
           message: "Category not found",
         });
 
@@ -111,7 +111,7 @@ class CategoryController {
         },
       });
 
-      res.status(200).json({
+      return res.status(200).json({
         message: "Category updated successfully",
         data: updatedCategory,
       });
@@ -125,7 +125,7 @@ class CategoryController {
     const foodId = parseInt(req.body.foodId);
     const categoryId = parseInt(req.body.categoryId)
     if (!foodId || !categoryId) {
-        res.status(HTTP.BAD_REQUEST).json({
+        return res.status(HTTP.BAD_REQUEST).json({
             message: 'Invalid or missing parameter in the request body'
         }) 
     }
@@ -134,13 +134,13 @@ class CategoryController {
         const food = await db.food.findUnique({
             where: { id: foodId}
         })
-        if (!food) res.status(HTTP.BAD_REQUEST).json({
+        if (!food) return res.status(HTTP.BAD_REQUEST).json({
             message: "Food not found"
         })
         const category = await db.category.findUnique({
             where: { id: categoryId }
         })
-        if (!category) res.status(HTTP.BAD_REQUEST).json({
+        if (!category)  return res.status(HTTP.BAD_REQUEST).json({
             message: "Category not found"
         })
         
@@ -151,7 +151,7 @@ class CategoryController {
             }
         })
 
-        res.status(HTTP.OK).json({
+        return res.status(HTTP.OK).json({
             message: 'Food updated successfully',
             data: foodUpdated
         })

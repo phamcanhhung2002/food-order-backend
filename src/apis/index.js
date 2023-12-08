@@ -4,3 +4,4 @@ export * from "./logout/logout.router.js";
 export * from "./refresh/refresh.router.js";
 export * from "./signup/signup.router.js";
 export * from "./customer/customer.router.js";
+export * from "./category/category.router.js";
