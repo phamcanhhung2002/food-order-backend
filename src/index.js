@@ -8,6 +8,7 @@ import {
   logoutRouter,
   signupRouter,
   refreshRouter,
+  categoryRouter,
   customerRouter,
 } from "./apis/index.js";
 import { PORT, API_PREFIX, PREFIX, CORS_OPTION } from "./constants/index.js";
@@ -19,18 +20,19 @@ if (!PORT) {
 }
 
 const app = express();
-
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors(CORS_OPTION));
 
+app.use(`${API_PREFIX}/${PREFIX.CATEGORY}`, categoryRouter);
 app.use(`${API_PREFIX}/${PREFIX.SIGNUP}`, signupRouter);
 app.use(`${API_PREFIX}/${PREFIX.LOGIN}`, loginRouter);
 app.use(`${API_PREFIX}/${PREFIX.LOGOUT}`, logoutRouter);
 app.use(`${API_PREFIX}/${PREFIX.REFRESH}`, refreshRouter);
 app.use(`${API_PREFIX}/${PREFIX.FOOD}`, foodRouter);
 
+console.log(`${API_PREFIX}/${PREFIX.CATEGORY}`)
 app.use(verifyJWT);
 
 app.use(`${API_PREFIX}/${PREFIX.CUSTOMER}`, customerRouter);
