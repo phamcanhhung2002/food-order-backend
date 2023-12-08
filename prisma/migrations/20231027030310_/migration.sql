@@ -2,13 +2,11 @@ BEGIN TRY
 
 BEGIN TRAN;
 
--- CreateTable
-CREATE TABLE [dbo].[Category] (
-    [id] INT NOT NULL IDENTITY(1,1),
-    [name] VARCHAR(255) NOT NULL,
-    [imageId] VARCHAR(255) NOT NULL,
-    CONSTRAINT [Category_pkey] PRIMARY KEY CLUSTERED ([id])
-);
+-- AlterTable
+ALTER TABLE [dbo].[Category] ADD CONSTRAINT [Category_quantity_df] DEFAULT 0 FOR [quantity];
+
+-- AlterTable
+ALTER TABLE [dbo].[Food] ADD CONSTRAINT [Food_quantity_df] DEFAULT 0 FOR [quantity];
 
 -- CreateTable
 CREATE TABLE [dbo].[Tag] (
@@ -38,22 +36,6 @@ CREATE TABLE [dbo].[Review] (
     [foodId] INT NOT NULL,
     [content] TEXT NOT NULL,
     CONSTRAINT [Review_pkey] PRIMARY KEY CLUSTERED ([id])
-);
-
--- CreateTable
-CREATE TABLE [dbo].[Food] (
-    [id] INT NOT NULL IDENTITY(1,1),
-    [categoryId] INT NOT NULL,
-    [name] VARCHAR(255) NOT NULL,
-    [price] SMALLMONEY NOT NULL,
-    [currentPrice] SMALLMONEY NOT NULL,
-    [energy] INT NOT NULL,
-    [rating] FLOAT(53) NOT NULL,
-    [quantity] INT NOT NULL CONSTRAINT [Food_quantity_df] DEFAULT 0,
-    [introduction] NVARCHAR(1000) NOT NULL,
-    [description] NVARCHAR(1000) NOT NULL,
-    [createdDate] DATETIME2 NOT NULL,
-    CONSTRAINT [Food_pkey] PRIMARY KEY CLUSTERED ([id])
 );
 
 -- CreateTable
@@ -122,8 +104,7 @@ CREATE TABLE [dbo].[Address] (
 CREATE TABLE [dbo].[Customer] (
     [id] INT NOT NULL IDENTITY(1,1),
     [username] VARCHAR(255) NOT NULL,
-    [hashPassword] VARCHAR(255) NOT NULL,
-    [refreshToken] VARCHAR(1000),
+    [hashKey] VARCHAR(255) NOT NULL,
     CONSTRAINT [Customer_pkey] PRIMARY KEY CLUSTERED ([id]),
     CONSTRAINT [Customer_username_key] UNIQUE NONCLUSTERED ([username])
 );
@@ -132,8 +113,7 @@ CREATE TABLE [dbo].[Customer] (
 CREATE TABLE [dbo].[Admin] (
     [id] INT NOT NULL IDENTITY(1,1),
     [username] VARCHAR(255) NOT NULL,
-    [hashPassword] VARCHAR(255) NOT NULL,
-    [refreshToken] VARCHAR(1000),
+    [hashKey] VARCHAR(255) NOT NULL,
     CONSTRAINT [Admin_pkey] PRIMARY KEY CLUSTERED ([id]),
     CONSTRAINT [Admin_username_key] UNIQUE NONCLUSTERED ([username])
 );
@@ -173,9 +153,6 @@ ALTER TABLE [dbo].[Image] ADD CONSTRAINT [Image_foodId_fkey] FOREIGN KEY ([foodI
 
 -- AddForeignKey
 ALTER TABLE [dbo].[Review] ADD CONSTRAINT [Review_foodId_fkey] FOREIGN KEY ([foodId]) REFERENCES [dbo].[Food]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE [dbo].[Food] ADD CONSTRAINT [Food_categoryId_fkey] FOREIGN KEY ([categoryId]) REFERENCES [dbo].[Category]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE [dbo].[Order] ADD CONSTRAINT [Order_voucherId_fkey] FOREIGN KEY ([voucherId]) REFERENCES [dbo].[Voucher]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
