@@ -35,7 +35,16 @@ customerRouter.patch(
 customerRouter.delete(
   "/:customerId/order/food/:foodId",
   param(["customerId", "foodId"]).isInt({ min: 0 }).toInt(),
+  body("valueRating").isInt({ min: 0, max: 5 }).toInt(),
   verifyRoles([USER_ROLES.CUSTOMER]),
   verifyUser("customer"),
   CustomerService.removeFoodFromOrder
+);
+
+customerRouter.post(
+  "/:customerId/rating/:foodId",
+  param(["customerId", "foodId"]).isInt({ min: 0 }).toInt(),
+  verifyRoles([USER_ROLES.CUSTOMER]),
+  verifyUser("customer"),
+  CustomerService.ratingFood
 );

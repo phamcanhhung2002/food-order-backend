@@ -2,8 +2,10 @@ import { validationResult } from "express-validator";
 import {
   ADD_FOOD_TO_ORDER,
   ENTITY_NOT_FOUND,
+  FOOD_REVIEWED,
   HTTP,
   PRISMA,
+  RATRING_FOOD,
   REMOVE_FOOD_FROM_ORDER,
   STATUS,
   UPDATE_FOOD_IN_ORDER,
@@ -54,6 +56,14 @@ const findCurrentOrder = (select, customerId) => {
 
 const findFoodById = (select, id) => {
   return db.food.findUnique({
+    select,
+    where: {
+      id,
+    },
+  });
+};
+const findCustomerById = (select, id) => {
+  return db.Customer.findUnique({
     select,
     where: {
       id,
@@ -232,6 +242,7 @@ export const updateQuantityOfFoodInOrder = async (req, res, next) => {
         quantity,
       },
     });
+
     const orderPromise = db.order.update({
       select: {
         id: true,
@@ -247,6 +258,7 @@ export const updateQuantityOfFoodInOrder = async (req, res, next) => {
         },
       },
     });
+
     await db.$transaction([foodsOnOrdersPromise, orderPromise]);
     return res.json({
       message: UPDATE_FOOD_IN_ORDER(currentFoodsOnOrders.food.name),
@@ -339,5 +351,58 @@ export const removeFoodFromOrder = async (req, res, next) => {
     });
   } catch (err) {
     next(err);
+  }
+};
+
+export const ratingFood = async (req, res, next) => {
+  try {
+    const { customerId, foodId } = req.params;
+    const { valueRating } = req.body;
+
+    const existingFood = await findFoodById(
+      {
+        name: true,
+        rating: true,
+        rating_ID: true,
+      },
+      foodId
+    );
+    if (existingFood) {
+      const index = existingFood.rating_ID.findIndex(
+        (element) => element.id === customerId
+      );
+      if (index == -1) {
+        const total_agv =
+          parseFloat(existingFood.rating) *
+            parseInt(existingFood.rating_ID.length) +
+          parseInt(valueRating);
+        const total_ID = parseFloat(existingFood.rating_ID.length + 1);
+        const newrating = parseFloat((total_agv / total_ID).toFixed(1));
+        const updatedFood = await db.food.update({
+          where: { id: foodId },
+          data: {
+            rating_ID: {
+              connect: { id: customerId },
+            },
+            rating: newrating,
+          },
+        });
+        return res.json({
+          message: RATRING_FOOD(existingFood.name),
+        });
+      } else {
+        return res.json({
+          message: FOOD_REVIEWED(),
+        });
+      }
+    } else {
+      return res.json({
+        message: ENTITY_NOT_FOUND("Food"),
+      });
+    }
+  } catch (error) {
+    return res
+      .status(HTTP.NOT_FOUND)
+      .json({ message: ENTITY_NOT_FOUND("Food") });
   }
 };

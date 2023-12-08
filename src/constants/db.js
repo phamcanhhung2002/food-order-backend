@@ -13,6 +13,10 @@ export const REMOVE_FOOD_FROM_ORDER = (foodName) =>
   `Remove ${foodName} from cart successfully`;
 export const UPDATE_FOOD_IN_ORDER = (foodName) =>
   `Update ${foodName} in cart successfully!`;
+export const RATRING_FOOD = (foodName) =>
+  `Rating ${foodName} successfully!`;
+export const FOOD_REVIEWED = () =>
+  `Food reviewed`;
 export const PRISMA = {
   FOREIGN_KEY_FAILED: "P2003",
   RECORD_NOT_FOUND: "P2025",

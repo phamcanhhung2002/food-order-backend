@@ -23,7 +23,6 @@ export const login = (userType) => {
       return res
         .status(HTTP.BAD_REQUEST)
         .json({ message: REQUIRED_INFO_MESSAGE });
-
     try {
       const foundUser = await db[userTableName].findUnique({
         include:
@@ -47,7 +46,9 @@ export const login = (userType) => {
           username,
         },
       });
-      if (!foundUser) return res.sendStatus(HTTP.UNAUTHORIZED); //Unauthorized
+      if (!foundUser) {
+        return res.sendStatus(HTTP.UNAUTHORIZED);
+      } //Unauthorized
       // evaluate password
       const match = await bcrypt.compare(password, foundUser.hashPassword);
       if (!match) return res.sendStatus(HTTP.UNAUTHORIZED); //Unauthorized

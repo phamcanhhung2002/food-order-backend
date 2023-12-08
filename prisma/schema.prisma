@@ -52,6 +52,7 @@ model Food {
   currentPrice    Float           @db.SmallMoney
   energy          Int
   rating          Float
+  rating_ID       Customer[]      @relation(name: "FoodRatingRelation")
   quantity        Int             @default(0)
   introduction    String
   description     String
@@ -62,7 +63,7 @@ model Food {
   menus           Menu[]
   images          Image[]
   orders          FoodsOnOrders[]
-  customers       Customer[]
+  customers       Customer[]      @relation(name: "FoodCustomerRelation")
 }
 
 model Voucher {
@@ -123,7 +124,8 @@ model Address {
 
 model Customer {
   id            Int       @id @default(autoincrement())
-  favoriteFoods Food[]
+  favoriteFoods Food[]    @relation(name: "FoodCustomerRelation")
+  foodRatings   Food[]    @relation(name: "FoodRatingRelation")
   addresses     Address[]
   orders        Order[]
   username      String    @unique @db.VarChar(255)

@@ -12,7 +12,7 @@
               "currentPrice": 2,
               "quantity": 15,
               "energy": 217,
-              "rating": 3.5,
+              "rating": 0,
               "featuredImageId": "j8zjp3dd5cx1oaxor7ot",
               "images": {
                 "createMany": {
@@ -49,7 +49,7 @@
               "currentPrice": 3.2,
               "energy": 208,
               "quantity": 20,
-              "rating": 4,
+              "rating": 0,
               "featuredImageId": "f2erb1yooak6bw9ysnsm",
               "images": {
                 "createMany": {
