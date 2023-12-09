@@ -110,7 +110,7 @@ export const getAllFoods = async (req, res, next) => {
         contains: name, 
       } ,
       categoryId: categoryId ? parseInt(categoryId) : undefined ,
-      price: {
+      currentPrice: {
         gte: minPrice ? parseInt(minPrice) : undefined,
         lte: maxPrice ? parseInt(maxPrice) : undefined, 
       },
