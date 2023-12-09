@@ -1,4 +1,4 @@
-import { PORT } from "./enviroment.js";
+import { CLIENT_PORT } from "./enviroment.js";
 
 export const PREFIX = {
   FOOD: "foods",
@@ -8,11 +8,11 @@ export const PREFIX = {
   LOGOUT: "logout",
   CUSTOMER: "customers",
   ADMIN: "admins",
-  CATEGORY: "categories"
+  CATEGORY: "categories",
 };
 
 export const CORS_OPTION = {
-  origin: `http://localhost:${PORT}`,
+  origin: `http://localhost:${CLIENT_PORT}`,
 };
 
 export const API_PREFIX = "/api/v1";
