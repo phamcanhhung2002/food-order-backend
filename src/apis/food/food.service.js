@@ -1,138 +1,76 @@
-import {
-  DESC,
-  DEFAULT_PAGE,
-  FOODS_PER_PAGE,
-  HTTP,
-  SORT_OPTIONS,
-  ASC,
-  DEFAULT_SORT_OPTION,
-} from "../../constants/index.js";
+import { ASC, DESC, HTTP } from "../../constants/index.js";
+import { validationResult } from "express-validator";
 import { db } from "../../utils/db.server.js";
 
-// const validateParams = (req) => {
-//   let { page, sort, ord, cat, price } = req.query;
-
-//   // If not send, use default options
-//   page = parseInt(page) || DEFAULT_PAGE;
-//   ord = ord || DESC;
-//   sort = sort || DEFAULT_SORT_OPTION;
-//   // If not send, mean don't filter using these params
-//   cat = parseInt(cat);
-//   let maxPrice, minPrice;
-//   if (price) {
-//     [minPrice, maxPrice] = price.split("-").map((p) => parseFloat(p));
-//   }
-
-//   // If specify page, it must be greater than zero
-//   // If specify sort, it must be in sort options
-//   // If specify ord, it must be in order options
-//   // if specify price, both min and max must be not nullish
-//   const isBadParams =
-//     page < 0 ||
-//     !SORT_OPTIONS.includes(sort) || ktpm
-//     ![DESC, ASC].includes(ord) ||
-//     (maxPrice && !minPrice) ||
-//     (!maxPrice && minPrice);
-
-//   return { page, ord, sort, cat, minPrice, maxPrice, isBadParams };
-// };
-
-// export const getAllFoods = async (req, res, next) => {
-//   const { page, ord, sort, cat, minPrice, maxPrice, isBadParams } =
-//     validateParams(req);
-//   if (isBadParams) return res.sendStatus(HTTP.BAD_REQUEST);
-
-//   // Caculate skip and take param
-//   const skip = (page - 1) * FOODS_PER_PAGE;
-//   const take = FOODS_PER_PAGE;
-
-//   // Create orderBy
-//   const orderBy = {};
-//   orderBy[sort] = ord;
-
-//   // Create where
-//   const where = {};
-//   if (cat) where.categoryId = cat;
-//   if (minPrice) where.currentPrice = { gte: minPrice, lte: maxPrice };
-
-//   try {
-//     const numItemsPromise = db.food.count({ where });
-//     const foodsPromise = db.food.findMany({
-//       skip,
-//       take,
-//       select: {
-//         id: true,
-//         name: true,
-//         price: true,
-//         currentPrice: true,
-//         featuredImageId: true,
-//       },
-//       where,
-//       orderBy,
-//     });
-
-//     const [foods, numItems] = await Promise.all([
-//       foodsPromise,
-//       numItemsPromise,
-//     ]);
-
-//     const numPages = Math.ceil(numItems / FOODS_PER_PAGE);
-
-//     return res.json({
-//       pagination: {
-//         numItems,
-//         numPages,
-//       },
-//       foods,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
 export const getAllFoods = async (req, res, next) => {
-  let { page, size, name, categoryId, minPrice, maxPrice } = req.query;
-
+  const result = validationResult(req);
+  if (!result.isEmpty()) return res.sendStatus(HTTP.BAD_REQUEST);
+  let { page, size, name, cat, sort, minPrice, maxPrice } = req.query;
 
   try {
-    const pagination = {}
+    const pagination = {};
     if (size) {
-      size = parseInt(size);
-      pagination.take = size
+      pagination.take = size;
       if (page) {
-        pagination.skip = (page - 1) * size,
-        page = parseInt(page);
+        pagination.skip = (page - 1) * size;
       }
     }
-
-    const where = {
-      name: {
-        contains: name, 
-      } ,
-      categoryId: categoryId ? parseInt(categoryId) : undefined ,
-      currentPrice: {
-        gte: minPrice ? parseInt(minPrice) : undefined,
-        lte: maxPrice ? parseInt(maxPrice) : undefined, 
-      },
+    const where = {};
+    if (name) {
+      where.name = {
+        contains: name,
+      };
     }
 
-    const [total, foods] = await db.$transaction([
-      db.food.count({where}),
-      db.food.findMany({
-        ...pagination,
-        where
-      })
-    ])
+    if (cat) {
+      where.categoryId = {
+        in: cat,
+      };
+    }
 
-    res.status(200).json({
+    let orderBy = undefined;
+    switch (sort) {
+      case "price":
+        orderBy = { currentPrice: ASC };
+        break;
+      case "fvr":
+        orderBy = { rating: DESC };
+    }
+
+    where.currentPrice = {};
+    if (minPrice) {
+      where.currentPrice.gte = minPrice;
+    }
+    if (maxPrice) {
+      where.currentPrice.lte = maxPrice;
+    }
+    const select = {
+      id: true,
+      name: true,
+      price: true,
+      currentPrice: true,
+      featuredImageId: true,
+    };
+
+    const [total, foods] = await db.$transaction([
+      db.food.count({ where }),
+      db.food.findMany({
+        select,
+        ...pagination,
+        where,
+        orderBy,
+      }),
+    ]);
+
+    res.status(HTTP.OK).json({
       metaData: {
         page: page,
         size: size,
-        total: total
+        total: total,
       },
       data: foods,
     });
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    next(error);
   }
 };
