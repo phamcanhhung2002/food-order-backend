@@ -32,7 +32,6 @@ app.use(`${API_PREFIX}/${PREFIX.LOGOUT}`, logoutRouter);
 app.use(`${API_PREFIX}/${PREFIX.REFRESH}`, refreshRouter);
 app.use(`${API_PREFIX}/${PREFIX.FOOD}`, foodRouter);
 
-console.log(`${API_PREFIX}/${PREFIX.CATEGORY}`)
 app.use(verifyJWT);
 
 app.use(`${API_PREFIX}/${PREFIX.CUSTOMER}`, customerRouter);
