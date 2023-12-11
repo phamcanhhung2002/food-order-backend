@@ -9,6 +9,7 @@ export const PREFIX = {
   CUSTOMER: "customers",
   ADMIN: "admins",
   CATEGORY: "categories",
+  MENU: "menus",
 };
 
 export const CORS_OPTION = {
