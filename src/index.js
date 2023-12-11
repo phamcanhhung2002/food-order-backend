@@ -10,6 +10,7 @@ import {
   refreshRouter,
   categoryRouter,
   customerRouter,
+  menuRouter
 } from "./apis/index.js";
 import { PORT, API_PREFIX, PREFIX, CORS_OPTION } from "./constants/index.js";
 import { verifyJWT } from "./middlewares/verify-jwt.js";
@@ -31,6 +32,7 @@ app.use(`${API_PREFIX}/${PREFIX.LOGIN}`, loginRouter);
 app.use(`${API_PREFIX}/${PREFIX.LOGOUT}`, logoutRouter);
 app.use(`${API_PREFIX}/${PREFIX.REFRESH}`, refreshRouter);
 app.use(`${API_PREFIX}/${PREFIX.FOOD}`, foodRouter);
+app.use(`${API_PREFIX}/${PREFIX.MENU}`, menuRouter);
 
 app.use(verifyJWT);
 
