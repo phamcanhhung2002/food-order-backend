@@ -33,13 +33,15 @@ async function seed() {
       const adminHashPassword = await bcrypt.hash(admin.password, SALT_ROUNDS);
       await db.customer.create({
         data: {
-          username: customer.username,
+          email: customer.email,
+          name: customer.name,
           hashPassword: customerHashPassword,
         },
       });
       await db.admin.create({
         data: {
-          username: admin.username,
+          email: admin.email,
+          name: admin.name,
           hashPassword: adminHashPassword,
         },
       });

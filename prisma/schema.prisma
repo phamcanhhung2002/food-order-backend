@@ -4,17 +4,17 @@
 generator client {
   provider = "prisma-client-js"
 }
- 
+
 datasource db {
   provider = "sqlserver"
   url      = env("DATABASE_URL")
 }
 
 model Category {
-  id       Int    @id @default(autoincrement())
-  name     String @db.VarChar(255)
-  imageId  String @db.VarChar(1028)
-  foods    Food[]
+  id      Int    @id @default(autoincrement())
+  name    String @db.VarChar(255)
+  imageId String @db.VarChar(1028)
+  foods   Food[]
 }
 
 model Tag {
@@ -89,7 +89,7 @@ model Order {
   Customer     Customer        @relation(fields: [customerId], references: [id])
   customerId   Int
 }
- 
+
 model FoodsOnOrders {
   id       Int   @id @default(autoincrement())
   food     Food  @relation(fields: [foodId], references: [id])
@@ -100,7 +100,7 @@ model FoodsOnOrders {
 
   @@unique([foodId, orderId])
 }
- 
+
 model Phone {
   id        Int     @id @default(autoincrement())
   address   Address @relation(fields: [addressId], references: [id])
@@ -123,18 +123,19 @@ model Address {
 
 model Customer {
   id            Int       @id @default(autoincrement())
+  name          String    @db.VarChar(255)
   favoriteFoods Food[]
   addresses     Address[]
   orders        Order[]
-  username      String    @unique @db.VarChar(255)
+  email         String    @unique @db.VarChar(255)
   hashPassword  String    @db.VarChar(255)
   refreshToken  String?   @db.VarChar(1000)
 }
 
 model Admin {
   id           Int     @id @default(autoincrement())
-  username     String  @unique @db.VarChar(255)
+  email        String  @unique @db.VarChar(255)
+  name         String  @db.VarChar(255)
   hashPassword String  @db.VarChar(255)
   refreshToken String? @db.VarChar(1000)
 }
- 
