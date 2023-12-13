@@ -5,7 +5,7 @@ export const checkoutRouter = express.Router();
 
 checkoutRouter.post("/checkoutReview",async(req,res)=>{
     try{
-        const checkoutReview=await checkoutService.checkoutReviewVer2(req.body)
+        const checkoutReview=await checkoutService.checkoutReview(req.body)
         return res.status(HTTP.OK).json({ 
             message:`checkout review success`,
             metadata:checkoutReview

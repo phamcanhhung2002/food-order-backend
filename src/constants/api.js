@@ -12,6 +12,7 @@ export const PREFIX = {
   CHECKOUT:"checkout",
   RATING:"rating",
   CATEGORY: "categories",
+  MENU: "menus",
 };
 
 export const CORS_OPTION = {

@@ -37,14 +37,14 @@ class CategoryController {
     if (!name) {
       return res.status(HTTP.BAD_REQUEST).json({
         message: "Invalid body request",
-      }); 
+      });
     }
 
     try {
       const newCategory = await db.category.create({
         data: {
           name,
-          imageId
+          imageId,
         },
       });
 
@@ -53,7 +53,7 @@ class CategoryController {
         data: newCategory,
       });
     } catch (error) {
-      next(error)
+      next(error);
     }
   };
 
@@ -82,7 +82,7 @@ class CategoryController {
         message: `Category id ${id} deleted successfully`,
       });
     } catch (error) {
-      return res.status(404).json({message: error.message});
+      return res.status(404).json({ message: error.message });
     }
   };
 
@@ -95,7 +95,7 @@ class CategoryController {
           id: parseInt(id),
         },
       });
-      console.log(category)
+      console.log(category);
       if (!category)
         return res.status(404).json({
           message: "Category not found",
@@ -121,46 +121,45 @@ class CategoryController {
   };
 
   setCategoryFood = async (req, res, next) => {
-    console.log(req.body)
     const foodId = parseInt(req.body.foodId);
-    const categoryId = parseInt(req.body.categoryId)
+    const categoryId = parseInt(req.body.categoryId);
     if (!foodId || !categoryId) {
-        return res.status(HTTP.BAD_REQUEST).json({
-            message: 'Invalid or missing parameter in the request body'
-        }) 
+      return res.status(HTTP.BAD_REQUEST).json({
+        message: "Invalid or missing parameter in the request body",
+      });
     }
 
     try {
-        const food = await db.food.findUnique({
-            where: { id: foodId}
-        })
-        if (!food) return res.status(HTTP.BAD_REQUEST).json({
-            message: "Food not found"
-        })
-        const category = await db.category.findUnique({
-            where: { id: categoryId }
-        })
-        if (!category)  return res.status(HTTP.BAD_REQUEST).json({
-            message: "Category not found"
-        })
-        
-        const foodUpdated = await db.food.update({
-            where: { id: foodId },
-            data: {
-                categoryId: categoryId
-            }
-        })
+      const food = await db.food.findUnique({
+        where: { id: foodId },
+      });
+      if (!food)
+        return res.status(HTTP.BAD_REQUEST).json({
+          message: "Food not found",
+        });
+      const category = await db.category.findUnique({
+        where: { id: categoryId },
+      });
+      if (!category)
+        return res.status(HTTP.BAD_REQUEST).json({
+          message: "Category not found",
+        });
 
-        return res.status(HTTP.OK).json({
-            message: 'Food updated successfully',
-            data: foodUpdated
-        })
+      const foodUpdated = await db.food.update({
+        where: { id: foodId },
+        data: {
+          categoryId: categoryId,
+        },
+      });
 
+      return res.status(HTTP.OK).json({
+        message: "Food updated successfully",
+        data: foodUpdated,
+      });
     } catch (error) {
-        console.log(error)
-        next(error)
+      console.log(error);
+      next(error);
     }
-
   };
 }
 

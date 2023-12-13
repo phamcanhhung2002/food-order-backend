@@ -8,3 +8,4 @@ export * from "./checkout/checkout.router.js"
 export * from "./rating/rating.router.js"
 export * from "./customer/customer.router.js"
 export * from "./category/category.router.js";
+export * from "./menu/menu.router.js"

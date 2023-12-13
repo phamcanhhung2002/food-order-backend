@@ -70,10 +70,10 @@ export const checkoutReview=async({orderId,foods,discountCodeId})=>{
         checkout_order
     }
 }
-export const checkoutReviewVer2=async ({orderId,address})=>{
+export const checkoutReviewVer2=async ({orderId,addressId})=>{
     const foundOrder=await db.FoodsOnOrders.findFirst({where:{id:orderId}})
     if(!foundOrder) return console.log(`Order no found`,HTTP.BAD_REQUEST)
     await db.Order.update({where:{id:orderId},data:{status:1},})
-    return address
+    return addressId
 }
     
