@@ -19,7 +19,7 @@ export const createDiscount =async( { mininumOrder,discountValue,descript,codeId
 }
 export const getDiscountAmount=async({foods,codeId })=>{
     const foundDiscount=await db.Voucher.findFirst({where:{code:codeId}})
-    if(!foundDiscount) return console.log(`message:discount no found,${HTTP.BAD_REQUEST}`) //discount not exists
+    if(!foundDiscount) throw new Error(`message:discount no found,${HTTP.BAD_REQUEST}`) //discount not exists
     try{
         
             const {
@@ -31,7 +31,7 @@ export const getDiscountAmount=async({foods,codeId })=>{
                 return acc+(food.quantity*food.price)
             },0)
             if(totalOrder<minOrder){
-                return console.log(`message:discount require mininum value of ${minOrder}`,HTTP.INTERNAL_SERVER_ERROR)
+                throw new Error(`message:discount require mininum value of ${minOrder}`)
             }
             let amount,tax
             amount=(totalOrder*discount)/100
