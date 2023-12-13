@@ -1,12 +1,9 @@
 import { validationResult } from "express-validator";
 import {
-  ADD_FOOD_TO_ORDER,
   ENTITY_NOT_FOUND,
   HTTP,
   PRISMA,
-  REMOVE_FOOD_FROM_ORDER,
   STATUS,
-  UPDATE_FOOD_IN_ORDER,
 } from "../../constants/index.js";
 import { db } from "../../utils/db.server.js";
 
@@ -110,6 +107,10 @@ export const getOrder = async (req, res, next) => {
     // Find the current order
     const order = await findCurrentOrder(orderSelect, customerId);
 
+    if (order) {
+      order.total = order._count.foods;
+      order._count = undefined;
+    }
     return res.json({ order });
   } catch (e) {
     next(e);
@@ -121,6 +122,7 @@ export const addFoodToOrder = async (req, res, next) => {
   if (!result.isEmpty()) return res.sendStatus(HTTP.BAD_REQUEST);
   const { customerId } = req.params;
   const { foodId } = req.body;
+  let order = null;
   try {
     /* Might use raw SQL querys later for improvement */
     // Get the food's current price
@@ -145,8 +147,8 @@ export const addFoodToOrder = async (req, res, next) => {
     if (!currentOrder) {
       try {
         // Might throw foreign key exception if customer not found
-        await db.order.create({
-          select: { id: true },
+        order = await db.order.create({
+          select: orderSelect,
           data: {
             customerId,
             subTotal: food.currentPrice,
@@ -168,9 +170,12 @@ export const addFoodToOrder = async (req, res, next) => {
       }
     } else {
       await updateOrder(currentOrder.id, foodId, food.currentPrice);
+      order = await findCurrentOrder(orderSelect, customerId);
     }
-
-    return res.json({ message: ADD_FOOD_TO_ORDER(food.name) });
+    console.log(order);
+    order.total = order._count.foods;
+    order._count = undefined;
+    return res.json({ order });
   } catch (err) {
     next(err);
   }
@@ -233,9 +238,7 @@ export const updateQuantityOfFoodInOrder = async (req, res, next) => {
       },
     });
     const orderPromise = db.order.update({
-      select: {
-        id: true,
-      },
+      select: orderSelect,
       where: {
         id: currentOrder.id,
       },
@@ -247,9 +250,17 @@ export const updateQuantityOfFoodInOrder = async (req, res, next) => {
         },
       },
     });
-    await db.$transaction([foodsOnOrdersPromise, orderPromise]);
+    const [_, order] = await db.$transaction([
+      foodsOnOrdersPromise,
+      orderPromise,
+    ]);
+
+    if (order) {
+      order.total = order._count.foods;
+      order._count = undefined;
+    }
     return res.json({
-      message: UPDATE_FOOD_IN_ORDER(currentFoodsOnOrders.food.name),
+      order,
     });
   } catch (err) {
     if (err.code === PRISMA.RECORD_NOT_FOUND) {
@@ -305,15 +316,8 @@ export const removeFoodFromOrder = async (req, res, next) => {
       throw err;
     }
     // Update the subtotal of the order
-    const order = await db.order.update({
-      select: {
-        id: true,
-        _count: {
-          select: {
-            foods: true,
-          },
-        },
-      },
+    let order = await db.order.update({
+      select: orderSelect,
       where: {
         id: currentOrder.id,
       },
@@ -324,7 +328,12 @@ export const removeFoodFromOrder = async (req, res, next) => {
       },
     });
 
-    if (order._count.foods === 0) {
+    if (order) {
+      order.total = order._count.foods;
+      order._count = undefined;
+    }
+
+    if (order.total === 0) {
       // There is not any food in the order
       // so delete it
       await db.order.delete({
@@ -332,11 +341,11 @@ export const removeFoodFromOrder = async (req, res, next) => {
           id: order.id,
         },
       });
+
+      order = null;
     }
 
-    return res.json({
-      message: REMOVE_FOOD_FROM_ORDER(foodsOnOrders.food.name),
-    });
+    return res.json({ order });
   } catch (err) {
     next(err);
   }
