@@ -7,25 +7,26 @@ import {
   ACCESS_TK_EXP_TIME,
   COOKIE,
   AUTH_TYPE,
-  REQUIRED_INFO_MESSAGE,
+  REQUIRED_LOGIN_INFO_MESSAGE,
   RERESH_TK_EXP_TIME,
   HTTP,
   USER_TABLE_NAME,
   STATUS,
   USER_ROLES,
+  CREDITIAL_NOT_CORRECT,
 } from "../../constants/index.js";
 
 export const login = (userType) => {
   const userTableName = USER_TABLE_NAME(userType);
   return async (req, res, next) => {
-    const { username, password } = req.body;
-    if (!username || !password)
-    return res
-  .status(HTTP.BAD_REQUEST)
-  .json({ message: REQUIRED_INFO_MESSAGE });
-  
-  try {
-    const foundUser = await db[userTableName].findUnique({
+    const { email, password } = req.body;
+    if (!email || !password)
+      return res
+        .status(HTTP.BAD_REQUEST)
+        .json({ message: REQUIRED_LOGIN_INFO_MESSAGE });
+
+    try {
+      const foundUser = await db[userTableName].findUnique({
         include:
           userType === USER_ROLES.CUSTOMER
             ? {
@@ -44,13 +45,19 @@ export const login = (userType) => {
               }
             : {},
         where: {
-          username,
+          email,
         },
       });
-      if (!foundUser) return res.sendStatus(HTTP.UNAUTHORIZED); //Unauthorized
+      if (!foundUser)
+        return res
+          .status(HTTP.UNAUTHORIZED)
+          .json({ message: CREDITIAL_NOT_CORRECT }); //Unauthorized
       // evaluate password
       const match = await bcrypt.compare(password, foundUser.hashPassword);
-      if (!match) return res.sendStatus(HTTP.UNAUTHORIZED); //Unauthorized
+      if (!match)
+        return res
+          .status(HTTP.UNAUTHORIZED)
+          .json({ message: CREDITIAL_NOT_CORRECT }); //Unauthorized
 
       const roles = [userType];
       // create JWTs
@@ -86,6 +93,7 @@ export const login = (userType) => {
       return res.json({
         accessToken,
         userId: foundUser.id,
+        name: foundUser.name,
         numOfFoodsInOrder:
           userType === USER_ROLES.CUSTOMER
             ? foundUser.orders[0]?._count.foods || 0

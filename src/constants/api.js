@@ -17,6 +17,7 @@ export const PREFIX = {
 
 export const CORS_OPTION = {
   origin: `http://localhost:${CLIENT_PORT}`,
+  credentials: true,
 };
 
 export const API_PREFIX = "/api/v1";
