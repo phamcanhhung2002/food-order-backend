@@ -8,6 +8,9 @@ import {
   logoutRouter,
   signupRouter,
   refreshRouter,
+  discountRouter,
+  checkoutRouter,
+  ratingRouter,
   categoryRouter,
   customerRouter,
   menuRouter
@@ -31,7 +34,10 @@ app.use(`${API_PREFIX}/${PREFIX.SIGNUP}`, signupRouter);
 app.use(`${API_PREFIX}/${PREFIX.LOGIN}`, loginRouter);
 app.use(`${API_PREFIX}/${PREFIX.LOGOUT}`, logoutRouter);
 app.use(`${API_PREFIX}/${PREFIX.REFRESH}`, refreshRouter);
+app.use(`${API_PREFIX}/${PREFIX.DISCOUNT}`, discountRouter);
+app.use(`${API_PREFIX}/${PREFIX.CHECKOUT}`, checkoutRouter);
 app.use(`${API_PREFIX}/${PREFIX.FOOD}`, foodRouter);
+app.use(`${API_PREFIX}/${PREFIX.RATING}`, ratingRouter);
 app.use(`${API_PREFIX}/${PREFIX.MENU}`, menuRouter);
 
 app.use(verifyJWT);

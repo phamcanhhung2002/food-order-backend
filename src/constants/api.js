@@ -8,6 +8,9 @@ export const PREFIX = {
   LOGOUT: "logout",
   CUSTOMER: "customers",
   ADMIN: "admins",
+  DISCOUNT:"discount",
+  CHECKOUT:"checkout",
+  RATING:"rating",
   CATEGORY: "categories",
   MENU: "menus",
 };

@@ -88,6 +88,7 @@ model Order {
   shipperPhone String?         @db.VarChar(255)
   Customer     Customer        @relation(fields: [customerId], references: [id])
   customerId   Int
+  addressId    Int
 }
 
 model FoodsOnOrders {

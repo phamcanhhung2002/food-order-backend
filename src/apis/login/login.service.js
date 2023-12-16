@@ -71,6 +71,7 @@ export const login = (userType) => {
         ACCESS_TOKEN_SECRET,
         { expiresIn: ACCESS_TK_EXP_TIME }
       );
+
       const refreshToken = jwt.sign(
         { userId: foundUser.id },
         REFRESH_TOKEN_SECRET,

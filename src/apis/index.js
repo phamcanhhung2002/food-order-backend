@@ -3,6 +3,9 @@ export * from "./login/login.router.js";
 export * from "./logout/logout.router.js";
 export * from "./refresh/refresh.router.js";
 export * from "./signup/signup.router.js";
-export * from "./customer/customer.router.js";
+export * from "./discount/discount.router.js";
+export * from "./checkout/checkout.router.js"
+export * from "./rating/rating.router.js"
+export * from "./customer/customer.router.js"
 export * from "./category/category.router.js";
 export * from "./menu/menu.router.js"

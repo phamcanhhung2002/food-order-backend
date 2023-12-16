@@ -6,7 +6,8 @@ export const verifyJWT = (req, res, next) => {
   if (!authHeader?.startsWith(BEARER)) return res.sendStatus(HTTP.UNAUTHORIZED);
   const token = authHeader.split(" ")[1];
   jwt.verify(token, ACCESS_TOKEN_SECRET, (err, decoded) => {
-    if (err) return res.sendStatus(HTTP.FORBIDDEN); //invalid token
+    if (err) {
+      return res.sendStatus(HTTP.FORBIDDEN);} //invalid token
     req.userId = decoded.userInfo.id;
     req.roles = decoded.userInfo.roles;
     next();
