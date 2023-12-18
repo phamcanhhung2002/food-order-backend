@@ -29,6 +29,7 @@ customerRouter.patch(
   param(["customerId", "foodId"]).isInt({ min: 0 }).toInt(),
   body("quantity").isInt({ min: 0 }).toInt(),
   verifyRoles([USER_ROLES.CUSTOMER]),
+  verifyUser("customer"),
   CustomerService.updateQuantityOfFoodInOrder
 );
 
@@ -38,4 +39,15 @@ customerRouter.delete(
   verifyRoles([USER_ROLES.CUSTOMER]),
   verifyUser("customer"),
   CustomerService.removeFoodFromOrder
+);
+
+customerRouter.patch(
+  "/:customerId/order/checkout",
+  body("*")
+    .isString()
+    .custom((e) => e !== ""),
+  param(["customerId"]).isInt({ min: 0 }).toInt(),
+  verifyRoles([USER_ROLES.CUSTOMER]),
+  verifyUser("customer"),
+  CustomerService.checkout
 );

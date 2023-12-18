@@ -17,3 +17,5 @@ export const PRISMA = {
   FOREIGN_KEY_FAILED: "P2003",
   RECORD_NOT_FOUND: "P2025",
 };
+
+export const CHECKOUT_SUCESS = "Checkout successfully!";
