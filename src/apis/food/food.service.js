@@ -74,25 +74,55 @@ export const getAllFoods = async (req, res, next) => {
     next(error);
   }
 };
-export const addFood=async({
-  categoryId,name,
-  price,discount,
-  energy,rating,
-  quantity,introduction,
+export const getFood = async (req, res, next) => {
+  const { id } = req.params
+  try {
+    const food = await db.food.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+      select: {
+        id: true,
+        category: true,
+        name: true,
+        price: true,
+        currentPrice: true,
+        energy: true,
+        rating: true,
+        quantity: true,
+        introduction: true,
+        description: true,
+        createdDate: true,
+        featuredImageId: true,
+        images: true,
+      }
+    })
+    return res.status(200).json(food)
+  } catch (error) {
+    console.log(error)
+    return res.status(400).json({ message: error.message })
+  }
+};
+
+export const addFood = async ({
+  categoryId, name,
+  price, discount,
+  energy, rating,
+  quantity, introduction,
   description
-})=>{
-  const result=await db.Food.create({
-    data:{
-      categoryId:categoryId,
-      name:name,
-      price:price,
-      discount:discount,
-      energy:energy,
-      rating:rating,
-      quantity:quantity,
-      introduction:introduction,
-      description:description,
-      createdDate:new Date()
+}) => {
+  const result = await db.Food.create({
+    data: {
+      categoryId: categoryId,
+      name: name,
+      price: price,
+      discount: discount,
+      energy: energy,
+      rating: rating,
+      quantity: quantity,
+      introduction: introduction,
+      description: description,
+      createdDate: new Date()
     }
   })
   return result
