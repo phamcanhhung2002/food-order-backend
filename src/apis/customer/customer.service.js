@@ -1,5 +1,6 @@
 import { validationResult } from "express-validator";
 import {
+  CHECKOUT_SUCESS,
   ENTITY_NOT_FOUND,
   HTTP,
   PRISMA,
@@ -348,5 +349,63 @@ export const removeFoodFromOrder = async (req, res, next) => {
     return res.json({ order });
   } catch (err) {
     next(err);
+  }
+};
+
+export const checkout = async (req, res, next) => {
+  const result = validationResult(req);
+  if (!result.isEmpty()) return res.sendStatus(HTTP.BAD_REQUEST);
+  const shipAddress = req.body;
+  shipAddress.phone = {
+    create: {
+      number: shipAddress.phone,
+    },
+  };
+  try {
+    return db.$transaction(async (tx) => {
+      const newAddressId = (
+        await tx.address.create({
+          select: {
+            id: true,
+          },
+          data: {
+            ...shipAddress,
+            customerId: req.userId,
+          },
+        })
+      ).id;
+      const currentOrderId = (
+        await tx.order.findFirst({
+          select: {
+            id: true,
+          },
+          where: {
+            customerId: req.customerId,
+            status: STATUS.PENDING,
+          },
+        })
+      ).id;
+
+      await tx.order.update({
+        select: {
+          id: true,
+        },
+        where: {
+          id: currentOrderId,
+        },
+        data: {
+          address: {
+            connect: {
+              id: newAddressId,
+            },
+          },
+          status: STATUS.COMPLETED,
+        },
+      });
+
+      return res.status(HTTP.OK).json({ message: CHECKOUT_SUCESS });
+    });
+  } catch (error) {
+    next(error);
   }
 };
