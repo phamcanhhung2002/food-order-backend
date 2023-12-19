@@ -151,13 +151,15 @@ export const addFoodToOrder = async (req, res, next) => {
         order = await db.order.create({
           select: orderSelect,
           data: {
-            customerId,
+            customerId:customerId,
             subTotal: food.currentPrice,
             foods: {
               create: {
                 foodId,
               },
             },
+            addressId:null,
+            
           },
         });
       } catch (err) {
@@ -173,7 +175,6 @@ export const addFoodToOrder = async (req, res, next) => {
       await updateOrder(currentOrder.id, foodId, food.currentPrice);
       order = await findCurrentOrder(orderSelect, customerId);
     }
-    console.log(order);
     order.total = order._count.foods;
     order._count = undefined;
     return res.json({ order });
