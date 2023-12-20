@@ -11,6 +11,8 @@ foodRouter.get(
 foodRouter.get(
   "/:id", FoodService.getFood
 );
+
+
 foodRouter.post("/add",async(req,res)=>{
   try{
     const addFood=await FoodService.addFood({...req.body,categoryId:req.body.categoryId})
