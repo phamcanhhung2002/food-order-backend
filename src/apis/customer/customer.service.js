@@ -40,12 +40,11 @@ const orderSelect = {
   },
 };
 
-const findCurrentOrder = (select, customerId) => {
+const findCurrentOrder = (orderId,customerId) => {
   return db.order.findFirst({
-    select,
     where: {
+      id:orderId,
       customerId,
-      status: STATUS.PENDING,
     },
   });
 };
@@ -102,16 +101,14 @@ export const getOrder = async (req, res, next) => {
   const result = validationResult(req);
   if (!result.isEmpty()) return res.sendStatus(HTTP.BAD_REQUEST);
 
-  const { customerId } = req.params;
+  const { customerId,orderId } = req.params;
+  console.log(customerId)
+  console.log(orderId)
 
   try {
     // Find the current order
-    const order = await findCurrentOrder(orderSelect, customerId);
-
-    if (order) {
-      order.total = order._count.foods;
-      order._count = undefined;
-    }
+    const order = await findCurrentOrder(orderId,customerId);
+    console.log(`order:::::`,order)
     return res.json({ order });
   } catch (e) {
     next(e);
