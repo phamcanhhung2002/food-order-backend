@@ -7,7 +7,6 @@ import {
 } from "../../constants/index.js";
 import bcrypt from "bcrypt";
 import { db } from "../../utils/db.server.js";
-
 export const register = async (req, res, next) => {
   const { name, email, password } = req.body;
   if (!name || !email || !password)

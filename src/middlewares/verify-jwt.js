@@ -7,7 +7,7 @@ export const verifyJWT = (req, res, next) => {
   const token = authHeader.split(" ")[1];
   jwt.verify(token, ACCESS_TOKEN_SECRET, (err, decoded) => {
     if (err) {
-      return res.sendStatus(HTTP.FORBIDDEN);} //invalid token
+    return res.sendStatus(HTTP.FORBIDDEN);} //invalid token
     req.userId = decoded.userInfo.id;
     req.roles = decoded.userInfo.roles;
     next();
