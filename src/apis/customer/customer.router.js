@@ -8,8 +8,9 @@ import { verifyUser } from "../../middlewares/verify-user.js";
 export const customerRouter = express.Router();
 
 customerRouter.get(
-  "/:customerId/order",
+  "/:customerId/:orderId",
   param("customerId").isInt({ min: 0 }).toInt(),
+  param("orderId").isInt({ min: 0 }).toInt(),
   verifyRoles([USER_ROLES.CUSTOMER]),
   verifyUser("customer"),
   CustomerService.getOrder
