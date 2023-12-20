@@ -31,7 +31,7 @@ const checkProductByServer=async(foods)=>{
         })
         if(foundFood){
             return {
-                price:foundFood.price,
+                price:foundFood.currentPrice,
                 quantity:food.quantity,
                 id:food.foodId
             }

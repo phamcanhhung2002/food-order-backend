@@ -16,7 +16,8 @@ export const PREFIX = {
 };
 
 export const CORS_OPTION = {
-  origin: `http://localhost:${CLIENT_PORT}`,
+  //origin: `http://localhost:${CLIENT_PORT}`,
+  origin: `http://localhost:5174`,
   credentials: true,
 };
 
