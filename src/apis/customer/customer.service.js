@@ -45,8 +45,8 @@ const findCurrentOrder = (select, customerId) => {
     select,
     where: {
       customerId,
-      status: STATUS.PENDING,
     },
+	orderBy: {id: 'desc'},
   });
 };
 
@@ -107,6 +107,7 @@ export const getOrder = async (req, res, next) => {
   try {
     // Find the current order
     const order = await findCurrentOrder(orderSelect, customerId);
+	console.log(order)
 
     if (order) {
       order.total = order._count.foods;
@@ -382,7 +383,6 @@ export const checkout = async (req, res, next) => {
           },
           where: {
             customerId: req.customerId,
-            status: STATUS.PENDING,
           },
         })
       ).id;
