@@ -27,7 +27,7 @@ const app = express();
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors(CORS_OPTION));
+app.use(cors());
 
 app.use(`${API_PREFIX}/${PREFIX.CATEGORY}`, categoryRouter);
 app.use(`${API_PREFIX}/${PREFIX.SIGNUP}`, signupRouter);

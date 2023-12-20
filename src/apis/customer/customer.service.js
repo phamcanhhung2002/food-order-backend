@@ -40,12 +40,13 @@ const orderSelect = {
   },
 };
 
-const findCurrentOrder = (orderId,customerId) => {
+const findCurrentOrder = (select, customerId) => {
   return db.order.findFirst({
+    select,
     where: {
-      id:orderId,
       customerId,
     },
+	orderBy: {id: 'desc'},
   });
 };
 
@@ -101,14 +102,17 @@ export const getOrder = async (req, res, next) => {
   const result = validationResult(req);
   if (!result.isEmpty()) return res.sendStatus(HTTP.BAD_REQUEST);
 
-  const { customerId,orderId } = req.params;
-  console.log(customerId)
-  console.log(orderId)
+  const { customerId } = req.params;
 
   try {
     // Find the current order
-    const order = await findCurrentOrder(orderId,customerId);
-    console.log(`order:::::`,order)
+    const order = await findCurrentOrder(orderSelect, customerId);
+	console.log(order)
+
+    if (order) {
+      order.total = order._count.foods;
+      order._count = undefined;
+    }
     return res.json({ order });
   } catch (e) {
     next(e);
@@ -379,7 +383,6 @@ export const checkout = async (req, res, next) => {
           },
           where: {
             customerId: req.customerId,
-            status: STATUS.PENDING,
           },
         })
       ).id;
