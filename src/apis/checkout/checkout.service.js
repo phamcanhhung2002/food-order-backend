@@ -135,6 +135,8 @@ export const getDiscountTotal=async({orderId,customerId,discountCodeId})=>{
     checkout_order.tax=ItemCheckOut.tax
     foods_new.push(ItemCheckOut)
     await db.Order.update({where:{id:orderId},data:{status:STATUS.COMPLETED,voucherId:foundDiscocunt.id,tax:checkout_order.tax}})
+    console.log(orderId)
+
     return {
         foods:foods,
         foods_new:foods_new,

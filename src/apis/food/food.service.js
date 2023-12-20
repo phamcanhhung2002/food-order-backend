@@ -127,3 +127,28 @@ export const addFood = async ({
   })
   return result
 }
+
+export const getPopularFood = async (req, res) => {
+  const mostOrderedFoods = await db.FoodsOnOrders.groupBy({
+    by: ['foodId'],
+    _count: true,
+    orderBy: {
+      _count: {
+        foodId: 'desc'
+      }
+    },
+    take: parseInt(req.query.num) || 4
+  });
+  console.log(mostOrderedFoods.map((item) => item.foodId))
+
+  const popularFood = await db.food.findMany({
+    where: {
+      id: {
+        in: mostOrderedFoods.map((item) => item.foodId)
+      }
+    }
+  })
+
+
+  return res.status(200).json({data: popularFood});
+}

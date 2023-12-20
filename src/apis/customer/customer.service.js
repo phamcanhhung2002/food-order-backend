@@ -40,10 +40,10 @@ const orderSelect = {
   },
 };
 
-const findCurrentOrder = (select, customerId) => {
+const findCurrentOrder = (orderId,customerId) => {
   return db.order.findFirst({
-    select,
     where: {
+      id:orderId,
       customerId,
     },
 	orderBy: {id: 'desc'},
@@ -102,7 +102,9 @@ export const getOrder = async (req, res, next) => {
   const result = validationResult(req);
   if (!result.isEmpty()) return res.sendStatus(HTTP.BAD_REQUEST);
 
-  const { customerId } = req.params;
+  const { customerId,orderId } = req.params;
+  console.log(customerId)
+  console.log(orderId)
 
   try {
     // Find the current order
