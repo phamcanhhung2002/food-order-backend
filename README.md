@@ -30,7 +30,7 @@ Customers can:
 
 ## Setup
 
-Before you run this project, download the frontend source code of it [here](https://github.com/phamcanhhung/food-order-frontend.git).
+Before you run this project, download the frontend source code of it [here](https://github.com/phamcanhhung2002/food-order-frontend).
 
 Also, make you sure you installed these:
 
