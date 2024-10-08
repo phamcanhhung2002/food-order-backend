@@ -107,7 +107,6 @@ export const getOrder = async (req, res, next) => {
   try {
     // Find the current order
     const order = await findCurrentOrder(orderSelect, customerId);
-	console.log(order)
 
     if (order) {
       order.total = order._count.foods;

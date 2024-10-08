@@ -30,7 +30,7 @@ Customers can:
 
 ## Setup
 
-Before you run this project, download the frontend source code of it [here](https://github.com/phamcanhhung2002/food-order-frontend).
+Before you run this project, download the frontend source code of it [here](https://github.com/phamcanhhung/food-order-frontend.git).
 
 Also, make you sure you installed these:
 
@@ -47,6 +47,10 @@ To run the project:
 
 ```sh
 npm install
+```
+
+```sh
+npx prisma db push
 ```
 
 ```sh

@@ -1,4 +1,4 @@
-import { CLIENT_PORT } from "./enviroment.js";
+import { CLIENT_URL } from "./enviroment.js";
 
 export const PREFIX = {
   FOOD: "foods",
@@ -16,7 +16,7 @@ export const PREFIX = {
 };
 
 export const CORS_OPTION = {
-  // origin: `http://localhost:${CLIENT_PORT}`,
+  origin: CLIENT_URL,
   credentials: true,
 };
 

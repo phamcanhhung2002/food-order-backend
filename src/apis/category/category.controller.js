@@ -95,7 +95,7 @@ class CategoryController {
           id: parseInt(id),
         },
       });
-      console.log(category);
+
       if (!category)
         return res.status(404).json({
           message: "Category not found",

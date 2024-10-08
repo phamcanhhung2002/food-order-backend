@@ -139,7 +139,6 @@ export const getPopularFood = async (req, res) => {
     },
     take: parseInt(req.query.num) || 4
   });
-  console.log(mostOrderedFoods.map((item) => item.foodId))
 
   const popularFood = await db.food.findMany({
     where: {
