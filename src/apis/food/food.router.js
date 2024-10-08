@@ -5,6 +5,14 @@ import {HTTP} from "../../constants/index.js";
 export const foodRouter = express.Router();
 
 
+
+
+
+
+foodRouter.get(
+  "/best-seller",
+  FoodService.getPopularFood
+);
 foodRouter.get(
   "/:id", FoodService.getFood
 );
