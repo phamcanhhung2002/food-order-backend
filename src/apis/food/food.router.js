@@ -33,8 +33,8 @@ foodRouter.get(
   query("cat")
     .optional()
     .customSanitizer((value) => value.split(",").map((e) => parseInt(e)))
-    .custom((value) => {
-      return !value.some((e) => isNaN(e));
+    .custom((values) => {
+      return !values.some((e) => isNaN(e));
     }),
   query("sort")
     .optional()

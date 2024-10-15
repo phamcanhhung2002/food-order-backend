@@ -2,48 +2,75 @@ import { ASC, DESC, HTTP } from "../../constants/index.js";
 import { validationResult } from "express-validator";
 import { db } from "../../utils/db.server.js";
 
+function getPagination(page, size) {
+  return {
+    take: size ?? 10,
+    skip: (page - 1) * size
+  };
+}
+
+function getWhere(filters) {
+  const {
+    name,
+    cat,
+    minPrice,
+    maxPrice
+  } = filters;
+
+  const where = {};
+
+  if (name) {
+    where.name = {
+      contains: name,
+    };
+  }
+
+  if (cat) {
+    where.categoryId = {
+      in: cat,
+    };
+  }
+
+  where.currentPrice = {};
+
+  if (minPrice) {
+    where.currentPrice.gte = minPrice;
+  }
+  if (maxPrice) {
+    where.currentPrice.lte = maxPrice;
+  }
+
+  return where;
+}
+
+function getOrderBy(sort) {
+  let orderBy = [{
+    id: ASC
+  }]
+
+  switch (sort) {
+    case "price":
+      orderBy.push({ currentPrice: ASC });
+      break;
+    case "fvr":
+      orderBy.push({ rating: DESC });
+  }
+
+  return orderBy;
+}
+
 export const getAllFoods = async (req, res, next) => {
   const result = validationResult(req);
   if (!result.isEmpty()) return res.sendStatus(HTTP.BAD_REQUEST);
-  let { page, size, name, cat, sort, minPrice, maxPrice } = req.query;
+  let { page, size, sort } = req.query;
+  size = size ?? 10;
+  page = page ?? 1;
 
   try {
-    const pagination = {};
-    if (size) {
-      pagination.take = size;
-      if (page) {
-        pagination.skip = (page - 1) * size;
-      }
-    }
-    const where = {};
-    if (name) {
-      where.name = {
-        contains: name,
-      };
-    }
+    const pagination = getPagination(page, size);
+    const where = getWhere(req.query);
+    const orderBy = getOrderBy(sort);
 
-    if (cat) {
-      where.categoryId = {
-        in: cat,
-      };
-    }
-
-    let orderBy = undefined;
-    switch (sort) {
-      case "price":
-        orderBy = { currentPrice: ASC };
-        break;
-      case "fvr":
-        orderBy = { rating: DESC };
-    }
-
-    where.currentPrice = {};
-    if (minPrice) {
-      where.currentPrice.gte = minPrice;
-    }
-    if (maxPrice) {
-      where.currentPrice.lte = maxPrice;
-    }
     const select = {
       id: true,
       name: true,
@@ -61,12 +88,13 @@ export const getAllFoods = async (req, res, next) => {
         orderBy,
       }),
     ]);
-
-    res.status(HTTP.OK).json({
+   
+    return res.status(HTTP.OK).json({
       metaData: {
         page: page,
         size: size,
         total: total,
+        numPages: Math.ceil(total / size)
       },
       data: foods,
     });
@@ -74,6 +102,7 @@ export const getAllFoods = async (req, res, next) => {
     next(error);
   }
 };
+
 export const getFood = async (req, res, next) => {
   const { id } = req.params
   try {
